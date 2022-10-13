@@ -142,3 +142,7 @@ body, h1 {
     left: 0;
     background-color: red;
   }
+
+  .anxiety.is-distracted{
+    background-color: blue;
+  }
