@@ -28,7 +28,7 @@ let webpackConfig = {
 
 
 function javascript() {
-  return gulp.src("src/*.js")
+  return gulp.src("*.js")
     .pipe(webpackStream(webpackConfig, webpack2))
     .on('error', (err) => {
       console.log(err.message);
@@ -42,43 +42,43 @@ function javascript() {
     //   .on('error', e => { console.log(e); })
     // ))
     // .pipe($.if(!PRODUCTION, $.sourcemaps.write()))
-    .pipe(gulp.dest('src/dist'));
+    .pipe(gulp.dest('dist'));
 }
 
 
 function serve() {
   browserSync.init({
-    server: './src'
+    server: './'
   });
 
   //gulp.watch("app/js/*.js", javascript);
-  gulp.watch("src/*.js").on('change', gulp.series(javascript, browserSync.reload));
-  gulp.watch('src/index.html').on('change', browserSync.reload)
-  gulp.watch("src/**/*.css", css);
-  // gulp.watch("src/**/*.scss", sass);
+  gulp.watch("*.js").on('change', gulp.series(javascript, browserSync.reload));
+  gulp.watch('index.html').on('change', browserSync.reload)
+  gulp.watch("**/*.css", css);
+  // gulp.watch("**/*.scss", sass);
   //gulp.watch("*.php").on('change', browserSync.reload);
 }
 
 function sass() {
-  return gulp.src('src/*.scss')
+  return gulp.src('*.scss')
     .pipe(sass())
     .on('error', (err) => {
       console.log(err.message);
       //this.emit('end'); // Recover from errors
     })
-    .pipe(gulp.dest('src/dist'))
+    .pipe(gulp.dest('dist'))
     .pipe(browserSync.stream());
 }
 
 
 function css() {
-  return gulp.src('src/*.css')
+  return gulp.src('*.css')
     //.pipe(sass())
     // .on('error', (err) => {
     //   console.log(err.message);
     //   this.emit('end'); // Recover from errors
     // })
-    //.pipe(gulp.dest('src/dist'))
+    //.pipe(gulp.dest('dist'))
     .pipe(browserSync.stream());
 }
 
