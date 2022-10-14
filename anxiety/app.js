@@ -462,7 +462,9 @@ if (typeof Object.merge != 'function') {
     WordSearch.prototype.gameOver = function (lose) {
         let heading = 'Congratulations!';
         let message = 'You\'ve made it through the day!';
+        let statusClass = 'success';
         if (lose){
+            statusClass = 'fail';
             heading = 'Game Over'
             message = 'Maybe tomorrow will be better';
         }
@@ -474,6 +476,7 @@ if (typeof Object.merge != 'function') {
 
         //Create overlay content.
         var overlay = document.getElementById("ws-game-over-outer");
+        overlay.classList.add('is-' + statusClass);
         overlay.innerHTML = "<div class='ws-game-over-inner' id='ws-game-over-inner'>" +
             "<div class='ws-game-over' id='ws-game-over'>" +
             "<h2>" + heading + "</h2>" +
@@ -792,7 +795,7 @@ class Anxiety {
             requestAnimationFrame(this.animate);
             if (this.anxiety <= 100 && this.timeout <= 0) {
                 this.anxietyBar.classList.remove(this.distractedClass);
-                this.anxiety = this.anxiety + .04;
+                this.anxiety = this.anxiety + .03;
                 this.anxietyBar.style.height = this.anxiety + "%";
             }
         }

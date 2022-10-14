@@ -97,12 +97,16 @@ body, h1 {
   }
 
   .ws-game-over-outer {
-    background: rgba(58, 17, 24, 0.85);
+    background: rgba(0, 17, 24, 0.85);
     height: 100%;
     left: 0;
     position: absolute;
     top: 0;
     width: 100%;
+
+  }
+  .ws-game-over-outer.is-fail{
+    background: rgba(58, 17, 24, 0.85);
   }
 
   .ws-game-over-inner {
