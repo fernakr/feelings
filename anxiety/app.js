@@ -456,7 +456,13 @@ if (typeof Object.merge != 'function') {
     /**
      * Game Over
      */
-    WordSearch.prototype.gameOver = function () {
+    WordSearch.prototype.gameOver = function (lose) {
+        let heading = 'Congratulations!';
+        let message = 'You\'ve made it through the day!';
+        if (lose){
+            heading = 'Game Over!'
+            message = 'You\'ve run out of time!';
+        }
         //Create overlay.
         var overlay = document.createElement("div");
         overlay.setAttribute("id", "ws-game-over-outer");
@@ -467,8 +473,8 @@ if (typeof Object.merge != 'function') {
         var overlay = document.getElementById("ws-game-over-outer");
         overlay.innerHTML = "<div class='ws-game-over-inner' id='ws-game-over-inner'>" +
             "<div class='ws-game-over' id='ws-game-over'>" +
-            "<h2>Congratulations!</h2>" +
-            "<p>You've found all of the words!</p>" +
+            "<h2>" + heading + "</h2>" +
+            "<p>" + message + "</p>" +
             "</div>" +
             "</div>";
     }
@@ -776,7 +782,8 @@ class Anxiety {
         }
         
         if (this.anxiety >= 100){        
-            alert('Game Over');
+            //alert('Game Over');
+            gameobj.gameOver(true);
         }else{
             requestAnimationFrame(this.animate);
             if (this.anxiety <= 100 && this.timeout <= 0) {
