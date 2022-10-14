@@ -87,10 +87,10 @@ if (typeof Object.merge != 'function') {
                     phrase: 'tiktok',
                     type: 'distraction'
                 }, 
-                {
-                    phrase: 'art',
-                    type: 'selfcare'
-                }, 
+                // {
+                //     phrase: 'art',
+                //     type: 'selfcare'
+                // }, 
                 {
                     phrase: 'therapy',
                     type: 'selfcare'
@@ -422,7 +422,7 @@ if (typeof Object.merge != 'function') {
                         if (window.anxietyInstance) {
                             //console.log(currWord);
                             if (currWord.type === 'selfcare'){
-                                window.anxietyInstance.anxiety -= 10;                            
+                                window.anxietyInstance.anxiety -= 20;                            
                             }else{
                                 type = 'distraction';
                                 const timeoutDuration = 5;
@@ -475,6 +475,7 @@ if (typeof Object.merge != 'function') {
             "<div class='ws-game-over' id='ws-game-over'>" +
             "<h2>" + heading + "</h2>" +
             "<p>" + message + "</p>" +
+            "<button onClick='window.location.reload()'>Play Again</button>" +
             "</div>" +
             "</div>";
     }
@@ -788,7 +789,7 @@ class Anxiety {
             requestAnimationFrame(this.animate);
             if (this.anxiety <= 100 && this.timeout <= 0) {
                 this.anxietyBar.classList.remove(this.distractedClass);
-                this.anxiety = this.anxiety + .05;
+                this.anxiety = this.anxiety + .04;
                 this.anxietyBar.style.height = this.anxiety + "%";            
             }
         } 
