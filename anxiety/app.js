@@ -81,7 +81,8 @@ if (typeof Object.merge != 'function') {
                 },
                 {
                     phrase: 'medicate',
-                    type: 'distraction'
+                    type: 'distraction',
+                    factor: 1.25
                 },
                 {
                     phrase: 'tiktok',
@@ -93,7 +94,8 @@ if (typeof Object.merge != 'function') {
                 // },
                 {
                     phrase: 'therapy',
-                    type: 'selfcare'
+                    type: 'selfcare',
+                    factor: 2
                 },
                 {
                     phrase: 'journaling',
@@ -421,11 +423,12 @@ if (typeof Object.merge != 'function') {
                         this.solved++;
                         if (window.anxietyInstance) {
                             //console.log(currWord);
+                            const factor = currWord.factor ? currWord.factor : 1;
                             if (currWord.type === 'selfcare'){
-                                window.anxietyInstance.anxiety -= 20;
+                                window.anxietyInstance.anxiety -= 20 * 1;
                             }else{
                                 type = 'distraction';
-                                const timeoutDuration = 20;
+                                const timeoutDuration = 30 * factor;
                                 window.anxietyInstance.timeout += timeoutDuration*15;
                             }
                             //console.log(window.anxietyInstance.anxiety);
