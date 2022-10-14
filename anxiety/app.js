@@ -795,7 +795,7 @@ class Anxiety {
             requestAnimationFrame(this.animate);
             if (this.anxiety <= 100 && this.timeout <= 0) {
                 this.anxietyBar.classList.remove(this.distractedClass);
-                this.anxiety = this.anxiety + .03;
+                this.anxiety = this.anxiety + .035;
                 this.anxietyBar.style.height = this.anxiety + "%";
             }
         }
