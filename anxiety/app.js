@@ -460,8 +460,8 @@ if (typeof Object.merge != 'function') {
         let heading = 'Congratulations!';
         let message = 'You\'ve made it through the day!';
         if (lose){
-            heading = 'Game Over!'
-            message = 'You\'ve run out of time!';
+            heading = 'Game Over'
+            message = 'Maybe tomorrow will be better';
         }
         //Create overlay.
         var overlay = document.createElement("div");
