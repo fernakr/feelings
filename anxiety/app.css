@@ -86,8 +86,12 @@ body, h1 {
     background: #eee;
   }
   
-  .ws-found {
+  .ws-found--selfcare {
     background: yellow;
+  }
+
+  .ws-found--distraction {
+    background: orange;
   }
   
   .ws-game-over-outer {
@@ -141,8 +145,20 @@ body, h1 {
     width: 100%;
     left: 0;
     background-color: red;
+    transition: 0.3s background-color;
   }
 
   .anxiety.is-distracted{
-    background-color: blue;
+    background-color: blue;    
+  }
+
+  .anxiety.is-distracted:after{
+    position: absolute;
+    right: 100%;
+    margin-right: 10px;
+    content: "Distracted";
+    text-transform: uppercase;
+    color: blue;
+    font-weight: bold;
+    font-family: sans-serif;    
   }

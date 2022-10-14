@@ -405,16 +405,10 @@ if (typeof Object.merge != 'function') {
         words.push(words[0].split('').reverse().join(''));
 
         if (this.settings.words.findIndex(word => word.phrase === words[0]) > -1 ||
-            this.settings.words.indexOf(word => word.phrase === words[1]) > -1) {
-            for (var i = 0; i < selected.length; i++) {
-                var row = selected[i].row + 1,
-                    col = selected[i].col + 1,
-                    el = document.querySelector('.ws-area .ws-row:nth-child(' + row + ') .ws-col:nth-child(' + col + ')');
+            this.settings.words.findIndex(word => word.phrase === words[1]) > -1) {
+          
 
-                el.classList.add('ws-found');
-
-            }
-
+            let type = 'selfcare';
             //Cross word off list.
             var wordList = document.querySelector(".ws-words");
             var wordListItems = wordList.getElementsByTagName("li");
@@ -430,7 +424,9 @@ if (typeof Object.merge != 'function') {
                             if (currWord.type === 'selfcare'){
                                 window.anxietyInstance.anxiety -= 10;                            
                             }else{
-                                window.anxietyInstance.timeout += 3;
+                                type = 'distraction';
+                                const timeoutDuration = 5;
+                                window.anxietyInstance.timeout += timeoutDuration*15;
                             }                            
                             //console.log(window.anxietyInstance.anxiety);
                         }
@@ -438,6 +434,16 @@ if (typeof Object.merge != 'function') {
 
 
                 }
+            }
+
+            for (var i = 0; i < selected.length; i++) {
+                var row = selected[i].row + 1,
+                    col = selected[i].col + 1,
+                    el = document.querySelector('.ws-area .ws-row:nth-child(' + row + ') .ws-col:nth-child(' + col + ')');
+
+                el.classList.add('ws-found');
+                el.classList.add('ws-found--' + type);
+
             }
 
             //Game over?
@@ -763,18 +769,23 @@ class Anxiety {
     }
     
     animate() {
-        if (this.timeout > 0) {
-            this.timeout -= .1;
-         //   console.log(this.timeout);
+        if (this.timeout > 0) {            
+            this.timeout -= 1;
+           //console.log(this.timeout);
             this.anxietyBar.classList.add(this.distractedClass);
         }
         
-        if (this.anxiety <= 100 && this.timeout <= 0) {
-            this.anxietyBar.classList.remove(this.distractedClass);
-            this.anxiety = this.anxiety + .05;
-            this.anxietyBar.style.height = this.anxiety + "%";            
-        }
-        requestAnimationFrame(this.animate);
+        if (this.anxiety >= 100){        
+            alert('Game Over');
+        }else{
+            requestAnimationFrame(this.animate);
+            if (this.anxiety <= 100 && this.timeout <= 0) {
+                this.anxietyBar.classList.remove(this.distractedClass);
+                this.anxiety = this.anxiety + .05;
+                this.anxietyBar.style.height = this.anxiety + "%";            
+            }
+        } 
+        
     }
     init() {        
         requestAnimationFrame(this.animate);
