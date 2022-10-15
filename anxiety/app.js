@@ -307,15 +307,15 @@ if (typeof Object.merge != 'function') {
             for (var col = 0; col < this.settings.gridSize; col++) {
                 var cvEl = document.createElement('canvas');
                 cvEl.setAttribute('class', 'ws-col');
-                cvEl.setAttribute('width', 40);
-                cvEl.setAttribute('height', 40);
+                cvEl.setAttribute('width', 35);
+                cvEl.setAttribute('height', 35);
 
                 // Fill text in middle center
                 var x = cvEl.width / 2,
                     y = cvEl.height / 2;
 
                 var ctx = cvEl.getContext('2d');
-                ctx.font = '400 28px Calibri, serif';
+                ctx.font = '400 24px Calibri, serif';
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
                 ctx.fillStyle = '#333'; // Text color
