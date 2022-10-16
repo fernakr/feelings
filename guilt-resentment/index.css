@@ -39,3 +39,16 @@ canvas {
   height: 100%;
   mix-blend-mode: screen;
 }
+
+audio{
+  position: fixed;
+  bottom: 0;
+  right: 0;  
+  z-index: 2;
+  transition: 0.3s opacity;  
+  opacity: 0.2;
+}
+
+audio:hover{
+  opacity: 1;
+}
