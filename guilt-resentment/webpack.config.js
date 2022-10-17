@@ -15,6 +15,10 @@ module.exports = {
   // resolve: {
   //   extensions: ['.tsx', '.ts', '.js']
   // },
+  node: {
+    module: 'empty',
+    fs: 'empty'
+  },  
   module: {
     rules: [
       {

@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { TransformControls } from 'three/examples/jsm/controls/TransformControls.js';
+//import { TransformControls } from 'three/examples/jsm/controls/TransformControls.js';
 //import Stats from 'three/examples/jsm/libs/stats.module.js';
 import { InstancedFlow } from 'three/examples/jsm/modifiers/CurveModifier.js';
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
@@ -24,8 +24,13 @@ let scene,
 init();
 animate();
 
-function init() {
+document.getElementsByTagName('button')[0].addEventListener('click', function(){
+	document.body.classList.add('is-loaded');
+	document.getElementsByTagName('audio')[0].play();
+})
 
+function init() {	
+	
 	scene = new THREE.Scene();
 	scene.background = new THREE.Color(0x000011);
 	scene.fog = new THREE.Fog(0xcc0044, 0, 10);
@@ -73,7 +78,7 @@ function init() {
 
 	//
 
-	const light = new THREE.DirectionalLight(0xff0000);
+	const light = new THREE.DirectionalLight(0x220044);
 	light.position.set(- 30, 0, 0);
 	light.intensity = 1.0;
 	scene.add(light);
@@ -129,7 +134,7 @@ function init() {
 					flows[j].setCurve(i, curveIndex);
 					flows[j].moveIndividualAlongCurve(i, i * 1 / numberOfInstances);
 				}
-				flows[j].object3D.setColorAt( i, new THREE.Color( 0xffffff * Math.random() ) );
+				//flows[j].object3D.setColorAt( i, new THREE.Color( 0xffffff * Math.random() ) );
 
 			}
 		}
@@ -180,9 +185,10 @@ function onWindowResize() {
 
 }
 function animate() {
-	camera.position.set(2, 3, z);
+	
+//	camera.position.set(2, 3, z);
 	requestAnimationFrame(animate);
-
+	
 	if (action === ACTION_SELECT) {
 
 		rayCaster.setFromCamera(mouse, camera);
@@ -200,7 +206,7 @@ function animate() {
 
 	if (flows && flows.length > 0) {
 		for (let j = 0; j < flows.length; j++) {
-			flows[j].moveAlongCurve(0.0004);
+			flows[j].moveAlongCurve(0.0002);
 		}
 
 	}
@@ -212,7 +218,7 @@ function animate() {
 function render() {
 
 	renderer.render(scene, camera);
-
+	
 	//stats.update();
 
 }

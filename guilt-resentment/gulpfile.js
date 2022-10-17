@@ -1,5 +1,5 @@
 var gulp          = require('gulp');
-var sass          = require('gulp-sass');
+//var sass          = require('gulp-sass');
 const path = require('path');
 var browserSync   = require('browser-sync').create();
 var webpackStream =require('webpack-stream');
@@ -14,7 +14,7 @@ let webpackConfig = {
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.js$|jsx/, 
         use: 'babel-loader',
         exclude: path.resolve(__dirname, './node_modules/')
       },{
@@ -28,11 +28,11 @@ let webpackConfig = {
 
 
 function javascript() {
-  return gulp.src("*.js")
+  return gulp.src("assets/*.js")
     .pipe(webpackStream(webpackConfig, webpack2))
     .on('error', (err) => {
       console.log(err.message);
-      this.emit('end'); // Recover from errors
+      //this.emit('end'); // Recover from errors
     })
 
 
@@ -52,23 +52,23 @@ function serve() {
   });
 
   //gulp.watch("app/js/*.js", javascript);
-  gulp.watch("*.js").on('change', gulp.series(javascript, browserSync.reload));
+  gulp.watch("assets/*.js").on('change', gulp.series(javascript, browserSync.reload));
   gulp.watch('index.html').on('change', browserSync.reload)
   gulp.watch("**/*.css", css);
   // gulp.watch("**/*.scss", sass);
   //gulp.watch("*.php").on('change', browserSync.reload);
 }
 
-function sass() {
-  return gulp.src('*.scss')
-    .pipe(sass())
-    .on('error', (err) => {
-      console.log(err.message);
-      //this.emit('end'); // Recover from errors
-    })
-    .pipe(gulp.dest('dist'))
-    .pipe(browserSync.stream());
-}
+// function sass() {
+//   return gulp.src('*.scss')
+//     .pipe(sass())
+//     .on('error', (err) => {
+//       console.log(err.message);
+//       //this.emit('end'); // Recover from errors
+//     })
+//     .pipe(gulp.dest('dist'))
+//     .pipe(browserSync.stream());
+// }
 
 
 function css() {
@@ -84,7 +84,7 @@ function css() {
 
 
 gulp.task('javascript', javascript);
-gulp.task('sass', sass);
+//gulp.task('sass', sass);
 gulp.task('css', css);
 // gulp.task('serve', gulp.series('sass',serve));
 gulp.task('default', serve);
