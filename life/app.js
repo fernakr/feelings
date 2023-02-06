@@ -6,6 +6,7 @@ window.s1 =  function ($_p)  {
     let items = [];
     let dead = false;
     let inactionTimer = 0;
+    let happinessTimer = 0;
     
     var bullets = [];
     var currBlue = 96;
@@ -246,11 +247,12 @@ window.s1 =  function ($_p)  {
 
             currItems.push(new CurrItem(this));
             if (!start && !dead) {
-              stats.energy += this.values.energy;
-              stats.happiness += this.values.happiness;
-              stats.mental += this.values.mental;
-              stats.money += this.values.money;
+              if (typeof this.values.energy !== 'undefined') stats.energy += this.values.energy;
+              if (typeof this.values.happiness !== 'undefined') stats.happiness += this.values.happiness;
+              if (typeof this.values.mental !== 'undefined') stats.mental += this.values.mental;
+              if (typeof this.values.money !== 'undefined') stats.money += this.values.money;
               
+              if (typeof this.values.happiness !== 'undefined' && stats.happiness > 0) happinessTimer = 0;
               
             }
           }
@@ -296,11 +298,11 @@ window.s1 =  function ($_p)  {
     
     $_p.draw = function () {
       if (keyPressed === 'left' && fireRotation > -90) {
-        fireRotation -= 3
+        fireRotation -= 2
       }
 
       if (keyPressed === 'right' && fireRotation < 90) {
-        fireRotation += 3
+        fireRotation += 2
       }
       $_p.background(12, 12, currBlue, 90);
       $_p.fill(255);
@@ -332,6 +334,7 @@ window.s1 =  function ($_p)  {
 
         
         inactionTimer ++;
+        happinessTimer ++;
         const decrement = 0.01;
 
         
@@ -339,7 +342,13 @@ window.s1 =  function ($_p)  {
           stats.energy -= decrement * 10;
         }
         
-        if (stats.happiness <= 25){
+
+        if (happinessTimer * durationIncrement / 24 > 3){
+          stats.happiness -= decrement * 10;
+        }
+        
+
+        if (stats.happiness <= 25){          
           stats.energy -= decrement;
           stats.mental -= decrement;
         }
