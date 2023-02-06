@@ -1,6 +1,6 @@
 window.s1 =  function ($_p)  {
     let duration = 0;
-    
+    let keyPressed = false;
     let start = true;
     let items = [];
     let dead = false;
@@ -260,7 +260,13 @@ window.s1 =  function ($_p)  {
     let currItems = [];
     
     $_p.draw = function () {
-      
+      if (keyPressed === 'left' && fireRotation > -90) {
+        fireRotation -= 3
+      }
+
+      if (keyPressed === 'right' && fireRotation < 90) {
+        fireRotation += 3
+      }
       $_p.background(12, 12, currBlue, 90);
       $_p.fill(255);
       $_p.stroke(255, 0, 0);
@@ -403,9 +409,6 @@ window.s1 =  function ($_p)  {
       $_p.triangle(x - xOffset, y, x + xOffset, y + 4, x + xOffset, y - 4)
     }
     
-    $_p.keyReleased = function () {
-      currBlue = 96
-    };
     
     function fire() {
       bullets.push(new Bullet(fireRotation));
@@ -414,25 +417,33 @@ window.s1 =  function ($_p)  {
         stats.energy -= 1
       }
     }
+
     
     
+    $_p.keyReleased = function () {
+      currBlue = 96
+      if (!$_p.keyIsPressed){
+        keyPressed = false
+      }      
+
+    }
+
     $_p.keyPressed = function () {
       if ($_p.keyCode === $_p.ENTER) {
         if (stats.energy == 0) {
-          death = false;
+          duration = 0;
+          dead = false;
           stats = Object.assign({}, startValues);
         }
         start = false
       } else if ($_p.keyCode === 32 && stats.energy > 0) {
         fire()
       } else if ($_p.keyCode === $_p.LEFT_ARROW) {
-        if (fireRotation > -90) {
-          fireRotation -= 10
-        }
+        keyPressed = 'left';
+        
       } else if ($_p.keyCode === $_p.RIGHT_ARROW) {
-        if (fireRotation < 90) {
-          fireRotation += 10
-        }
+        keyPressed = 'right';
+        
       }
     };
   }
