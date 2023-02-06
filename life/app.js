@@ -89,12 +89,23 @@ window.s1 =  function ($_p)  {
         }
       },      
       {
+        name: 'Hobby',
+        color: 'limegreen',        
+        probability: 5,
+        values: {
+          happiness: 3,
+          energy: 0,
+          mental: 1,
+          money: -2
+        }
+      }, 
+      {
         name: 'Eat',
         color: 'limegreen',        
         probability: 25,
         values: {
           happiness: 1,
-          energy: 2,
+          energy: 3,
           mental: 1,
           money: -2
         }
@@ -105,7 +116,7 @@ window.s1 =  function ($_p)  {
         probability: 30,        
         values: {
           happiness: 0,
-          energy: 1,
+          energy: 2,
           mental: 1,
           money: 0
         }
@@ -322,7 +333,7 @@ window.s1 =  function ($_p)  {
         inactionTimer ++;
         const decrement = 0.01;
 
-        if (inactionTimer > 300){
+        if (inactionTimer > 600){
           stats.energy -= decrement * 10;
         }
         
