@@ -490,6 +490,8 @@ window.s1 =  function ($_p)  {
           duration = 0;
           dead = false;
           stats = Object.assign({}, startValues);
+          inactionTimer = 0;
+          happinessTimer = 0;
         }
         start = false
       } else if ($_p.keyCode === 32 && stats.energy > 0) {
