@@ -43,7 +43,7 @@ window.s1 =  function ($_p)  {
 
     const itemTypes = [
       {
-        name: 'Cleaning',
+        name: 'Clean',
         color: 'green',
         probability: 3,
         values: {
@@ -66,7 +66,7 @@ window.s1 =  function ($_p)  {
         }        
       },
       {
-        name: 'Cooking',
+        name: 'Cook',
         color: 'yellow',
         probability: 3,
         values: {
@@ -77,7 +77,7 @@ window.s1 =  function ($_p)  {
         }
       },      
       {
-        name: 'Sleeping',
+        name: 'Sleep',
         color: 'cyan',   
         probability: 10,
         values: {
@@ -88,7 +88,7 @@ window.s1 =  function ($_p)  {
         }
       },      
       {
-        name: 'Eating',
+        name: 'Eat',
         color: 'limegreen',        
         probability: 25,
         values: {
