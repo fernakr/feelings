@@ -62,10 +62,10 @@ window.s1 =  function ($_p)  {
         color: 'blue',
         probability: 20,
         values: {
-          happiness: -2,          
-          energy: -8,
+          happiness: -1,          
+          energy: -5,
           mental: -2,
-          money: 4 
+          money: 7 
         }        
       },
       {
@@ -76,7 +76,7 @@ window.s1 =  function ($_p)  {
           happiness: 1,          
           energy: -1,
           mental: 0,
-          money: -2
+          money: -1
         }
       },      
       {
@@ -153,7 +153,7 @@ window.s1 =  function ($_p)  {
           happiness: 5,
           mental: 1,
           money: 0,
-          energy: -2
+          energy: -1
         }
       }
     ];
