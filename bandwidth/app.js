@@ -192,7 +192,7 @@ window.s1 =  function ($_p)  {
       this.x = $_p.random(-$_p.width / 2, $_p.width);
       this.y = 0;
       this.rotation = $_p.random(5, 8);
-      this.gravity = $_p.random(0.1, 1);
+      this.gravity = $_p.random(0.4, 1.5);
       this.fall = function () {
         this.y += this.gravity;
       };
