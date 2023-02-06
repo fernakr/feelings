@@ -1,7 +1,9 @@
 window.s1 =  function ($_p)  {
+    let duration = 0;
     
     let start = true;
     let items = [];
+    let dead = false;
     
     var bullets = [];
     var currBlue = 96;
@@ -42,7 +44,7 @@ window.s1 =  function ($_p)  {
     const itemTypes = [
       {
         name: 'Cleaning',
-        color: 'purple',
+        color: 'green',
         probability: 3,
         values: {
           happiness: 2,
@@ -55,7 +57,7 @@ window.s1 =  function ($_p)  {
       {
         name: 'Work',
         color: 'blue',
-        probability: 10,
+        probability: 20,
         values: {
           happiness: -2,          
           energy: -8,
@@ -65,7 +67,7 @@ window.s1 =  function ($_p)  {
       },
       {
         name: 'Cooking',
-        color: 'purple',
+        color: 'yellow',
         probability: 3,
         values: {
           happiness: 1,          
@@ -76,7 +78,7 @@ window.s1 =  function ($_p)  {
       },      
       {
         name: 'Sleeping',
-        color: 'purple',   
+        color: 'cyan',   
         probability: 10,
         values: {
           happiness: 0,
@@ -87,7 +89,7 @@ window.s1 =  function ($_p)  {
       },      
       {
         name: 'Eating',
-        color: 'purple',        
+        color: 'limegreen',        
         probability: 25,
         values: {
           happiness: 1,
@@ -98,7 +100,7 @@ window.s1 =  function ($_p)  {
       },      
       {
         name: 'Drink H20',
-        color: 'purple',        
+        color: 'turquoise',        
         probability: 30,        
         values: {
           happiness: 0,
@@ -138,7 +140,7 @@ window.s1 =  function ($_p)  {
 
     function CurrItem(item){
       this.life = 0;
-      this.lifeSpan = 200;
+      this.lifeSpan = 100;
       this.name = item.name;
       this.y = 0;
       this.opacity = 255;
@@ -152,10 +154,14 @@ window.s1 =  function ($_p)  {
         if (this.life > this.lifeSpan) {
           currItems.splice(itemIndex)
         }
+        $_p.textAlign($_p.CENTER);
         $_p.noStroke();
+        $_p.fill($_p.color('navy'),100  - (this.life / this.lifeSpan) * 100);
+        $_p.rect($_p.width / 2 , $_p.height / 2  - this.y + 40, 130, 130);
+        
         $_p.textSize(15);        
         $_p.fill(255, this.opacity);        
-        $_p.textAlign($_p.CENTER);
+        
         $_p.text(`${this.name}`, $_p.width / 2, $_p.height / 2 - this.y);        
 
         for (let i = 0; i < Object.keys(this.values).length; i++) {          
@@ -241,7 +247,7 @@ window.s1 =  function ($_p)  {
       }
     }
 
-    const itemMax = 10;
+    const itemMax = 15;
     
     $_p.setup = function () {
       const canvas = $_p.createCanvas(1000, 600);
@@ -254,14 +260,18 @@ window.s1 =  function ($_p)  {
     let currItems = [];
     
     $_p.draw = function () {
+      
       $_p.background(12, 12, currBlue, 90);
       $_p.fill(255);
       $_p.stroke(255, 0, 0);
       if (stats.energy <= 0) {
+
+        dead = true;
         $_p.textAlign($_p.CENTER);
         $_p.text('GAME OVER', $_p.width / 2, $_p.height / 2);
+        $_p.text('You lasted for ' + (duration/24).toFixed(1) + ' days', $_p.width / 2, $_p.height / 2 + 30);
         $_p.textSize(15);
-        $_p.text('Hit ENTER to restart', $_p.width / 2, $_p.height / 2 + 30)
+        $_p.text('Hit ENTER to restart', $_p.width / 2, $_p.height / 2 + 60)
       }
       $_p.textAlign($_p.LEFT);
       $_p.textSize(25);
@@ -322,6 +332,7 @@ window.s1 =  function ($_p)  {
         items[i].display(i)
       }
       if (start) {
+        
         $_p.background(12, 12, currBlue, 150);
         $_p.textAlign($_p.CENTER);
         $_p.rectMode($_p.CENTER);
@@ -353,7 +364,13 @@ window.s1 =  function ($_p)  {
         $_p.noStroke();        
       
         $_p.text('ENTER TO start', $_p.width / 2, $_p.height / 2 + 75)
-      }
+      }else{
+        $_p.textSize(15);
+        $_p.noStroke();
+        $_p.textAlign($_p.LEFT);
+        $_p.text('Duration: ' + (duration/ 24).toFixed(1) + ' days', 10, 30);
+        if (!dead) duration += .025;
+      }      
       $_p.fill(255);
       $_p.strokeWeight(2);
       $_p.stroke(255);
@@ -394,7 +411,7 @@ window.s1 =  function ($_p)  {
       bullets.push(new Bullet(fireRotation));
       currBlue = 130;
       if (!start) {        
-        stats.energy -= 3
+        stats.energy -= 1
       }
     }
     
@@ -402,6 +419,7 @@ window.s1 =  function ($_p)  {
     $_p.keyPressed = function () {
       if ($_p.keyCode === $_p.ENTER) {
         if (stats.energy == 0) {
+          death = false;
           stats = Object.assign({}, startValues);
         }
         start = false
