@@ -4,6 +4,7 @@ window.s1 =  function ($_p)  {
     let start = true;
     let items = [];
     let dead = false;
+    let inactionTimer = 0;
     
     var bullets = [];
     var currBlue = 96;
@@ -119,6 +120,28 @@ window.s1 =  function ($_p)  {
           mental: -1,
           money: 0
         }
+      },
+      {
+        name: 'Booze',
+        color: 'red',
+        probability: 5,
+        values: {
+          happiness: 1,
+          mental: -1,
+          money: -1,
+          energy: 0
+        }
+      },
+      {
+        name: 'Friends & Family',
+        color: 'green',
+        probability: 3,
+        values: {
+          happiness: 5,
+          mental: 1,
+          money: 0,
+          energy: -2
+        }
       }
     ];
     // create array of min/max values based off probability index
@@ -210,7 +233,7 @@ window.s1 =  function ($_p)  {
             this.deathCount = 0;
 
             currItems.push(new CurrItem(this));
-            if (!start) {
+            if (!start && !dead) {
               stats.energy += this.values.energy;
               stats.happiness += this.values.happiness;
               stats.mental += this.values.mental;
@@ -293,36 +316,44 @@ window.s1 =  function ($_p)  {
         currItems[i].display(i);
       }
 
-      const decrement = 0.01;
+      if (!dead){
 
-      stats.energy -= decrement;
-      
-      if (stats.happiness <= 25){
-        stats.energy -= decrement;
-        stats.mental -= decrement;
+        
+        inactionTimer ++;
+        const decrement = 0.01;
+
+        if (inactionTimer > 300){
+          stats.energy -= decrement * 10;
+        }
+        
+        if (stats.happiness <= 25){
+          stats.energy -= decrement;
+          stats.mental -= decrement;
+        }
+
+        if (stats.energy <= 25){
+          stats.mental -= decrement;
+        }
+
+        if (stats.mental <= 25){
+          stats.energy -= decrement;
+        }
+
+        if (stats.money <= 25){
+          stats.mental -= decrement;
+          stats.energy -= decrement;
+        }
+        if (stats.energy > 100) {
+          stats.energy = 100
+        }
+        if (stats.happiness > 100) {
+          stats.happiness = 100
+        }
+        if (stats.mental > 100) {
+          stats.mental = 100
+        }
       }
 
-      if (stats.energy <= 25){
-        stats.mental -= decrement;
-      }
-
-      if (stats.mental <= 25){
-        stats.energy -= decrement;
-      }
-
-      if (stats.money <= 25){
-        stats.mental -= decrement;
-        stats.energy -= decrement;
-      }
-      if (stats.energy > 100) {
-        stats.energy = 100
-      }
-      if (stats.happiness > 100) {
-        stats.happiness = 100
-      }
-      if (stats.mental > 100) {
-        stats.mental = 100
-      }
       if (stats.energy < 0) {
         stats.energy = 0
       }
@@ -332,6 +363,7 @@ window.s1 =  function ($_p)  {
       if (stats.mental < 0) {
         stats.mental = 0
       }
+
 
       
       for (var i = 0; i < items.length; i++) {
@@ -430,6 +462,7 @@ window.s1 =  function ($_p)  {
     }
 
     $_p.keyPressed = function () {
+      inactionTimer = 0;
       if ($_p.keyCode === $_p.ENTER) {
         if (stats.energy == 0) {
           duration = 0;
