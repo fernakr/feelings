@@ -1,4 +1,5 @@
 window.s1 =  function ($_p)  {
+    const durationIncrement = .025;
     let duration = 0;
     let keyPressed = false;
     let start = true;
@@ -281,7 +282,7 @@ window.s1 =  function ($_p)  {
       }
     }
 
-    const itemMax = 15;
+    const itemMax = 20;
     
     $_p.setup = function () {
       const canvas = $_p.createCanvas(1000, 600);
@@ -333,7 +334,8 @@ window.s1 =  function ($_p)  {
         inactionTimer ++;
         const decrement = 0.01;
 
-        if (inactionTimer > 600){
+        
+        if (inactionTimer * durationIncrement / 24 > 1){
           stats.energy -= decrement * 10;
         }
         
@@ -419,7 +421,7 @@ window.s1 =  function ($_p)  {
         $_p.noStroke();
         $_p.textAlign($_p.LEFT);
         $_p.text('Duration: ' + (duration/ 24).toFixed(1) + ' days', 10, 30);
-        if (!dead) duration += .025;
+        if (!dead) duration += durationIncrement;
       }      
       $_p.fill(255);
       $_p.strokeWeight(2);
