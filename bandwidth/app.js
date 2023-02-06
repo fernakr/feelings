@@ -295,6 +295,7 @@ window.s1 =  function ($_p)  {
 
       const decrement = 0.01;
 
+      stats.energy -= decrement;
       
       if (stats.happiness <= 25){
         stats.energy -= decrement;
