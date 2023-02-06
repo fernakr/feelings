@@ -462,7 +462,7 @@ window.s1 =  function ($_p)  {
     }
 
     $_p.keyPressed = function () {
-      inactionTimer = 0;
+      
       if ($_p.keyCode === $_p.ENTER) {
         if (stats.energy == 0) {
           duration = 0;
@@ -471,6 +471,7 @@ window.s1 =  function ($_p)  {
         }
         start = false
       } else if ($_p.keyCode === 32 && stats.energy > 0) {
+        inactionTimer = 0;
         fire()
       } else if ($_p.keyCode === $_p.LEFT_ARROW) {
         keyPressed = 'left';
