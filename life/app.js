@@ -408,6 +408,7 @@ window.s1 =  function ($_p)  {
           spaceStroke = $_p.keyFill;
           spaceFill = $_p.keyStroke
         }
+        $_p.stroke(spaceStroke);
         $_p.fill(spaceFill);
         $_p.rect($_p.width / 2, $_p.height / 2 - 30, 120, 40);
         Key($_p.width / 2 - 40, $_p.height / 2 - 95);
