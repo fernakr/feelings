@@ -1,4 +1,77 @@
+
+// // fetch the data from an API with a GET request
+// // and then render it to the page
+
+
+// async function postData(url = '', data = {}) {
+//   // Default options are marked with *
+//   const response = await fetch(url, {
+//     method: 'POST', // *GET, POST, PUT, DELETE, etc.
+//     mode: 'cors', // no-cors, *cors, same-origin
+//     cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+//     credentials: 'same-origin', // include, *same-origin, omit
+//     headers: {
+//       'Content-Type': 'application/json',
+//       'api-key': 'LvaaeVFXeUVNBZXSbkW4gPZ0ewTFzLmIQJUvJjR3LNanIsLciSv11tbnThlJXgPL',
+//       // 'Content-Type': 'application/x-www-form-urlencoded',
+//     },
+//     redirect: 'follow', // manual, *follow, error
+//     referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+//     body: JSON.stringify(data) // body data type must match "Content-Type" header
+//   });
+//   return response.json(); // parses JSON response into native JavaScript objects
+// }
+
+// const scores = await postData('https://data.mongodb-api.com/app/data-tksyh/endpoint/data/v1/find', { dataSoure: 'Life', collection: 'life' })
+// console.log(scores);
+
+
+
 window.s1 =  function ($_p)  {
+    let blueOffset = 0;
+    let greenOffset = 0;
+    let redOffset = 0;
+    let moneyLow = false;
+    const levels = [
+      {
+        blueOffset: 30, 
+        durationStart: 10, // number of days
+        itemTypes: [
+          {
+            name: 'Car Accident',
+            color: 'red',
+            probability: 5,
+            values: {
+              happiness: -10,
+              energy: -10,
+              mental: -10,
+              money: -10
+            }
+          },
+          {
+            name: 'Health Issue',
+            color: 'red',
+            probability: 5,
+            values: {
+              happiness: -10,
+              energy: -10,
+              mental: -10,
+              money: -10
+            }
+          },
+          {
+            name: 'Breakup',
+            color: 'red',
+            probability: 5,
+            values: {
+              happiness: -10,
+              energy: -10,
+              mental: -10
+            }
+          }
+        ]
+      }
+    ]
     const durationIncrement = .025;
     let duration = 0;
     let keyPressed = false;
@@ -44,7 +117,7 @@ window.s1 =  function ($_p)  {
       }
     }
 
-    const itemTypes = [
+    let itemTypes = [
       {
         name: 'Clean',
         color: 'green',
@@ -105,8 +178,7 @@ window.s1 =  function ($_p)  {
         name: 'Eat',
         color: 'limegreen',        
         probability: 25,
-        values: {
-          happiness: 1,
+        values: {          
           energy: 3,
           mental: 1,
           money: -2
@@ -146,7 +218,7 @@ window.s1 =  function ($_p)  {
         }
       },
       {
-        name: 'Friends & Family',
+        name: 'See Friends & Family',
         color: 'green',
         probability: 3,
         values: {
@@ -160,19 +232,29 @@ window.s1 =  function ($_p)  {
     // create array of min/max values based off probability index
     
 
-    let probabilityMax = 0;
-    let probabilityRanges = [];
-    for (let i = 0; i < itemTypes.length; i++) {
-      const item = itemTypes[i];
-      const min = probabilityMax;
-      const max = probabilityMax + item.probability;
-      probabilityRanges.push({
-        min,
-        max,
-        item
-      });
-      probabilityMax = max;
-    }
+    
+    
+    function recalculateProbabilityRanges() {
+      let probabilityMax = 0;
+      let probabilityRanges = [];
+      for (let i = 0; i < itemTypes.length; i++) {
+        const item = itemTypes[i];
+        const min = probabilityMax;
+        const max = probabilityMax + item.probability;
+        probabilityRanges.push({
+          min,
+          max,
+          item
+        });
+        probabilityMax = max;
+      }
+      return { 
+        probabilityRanges,
+        probabilityMax
+      };
+    };
+
+    let { probabilityRanges, probabilityMax } = recalculateProbabilityRanges();
 
     function CurrItem(item){
       this.life = 0;
@@ -209,20 +291,14 @@ window.s1 =  function ($_p)  {
     
     function Item() {
 
+      
       const random = $_p.random(0, probabilityMax);
       const item = probabilityRanges.find((range) => {
         return random >= range.min && random < range.max;
       }).item;
       this.values = item.values;
       this.name = item.name;
-      this.color = item.color;
-
-      // this.happiness = item.happiness;
-      // this.energy = item.energy;
-      // this.mental = item.mental;
-      // this.money = item.money;
-
-                  
+      this.color = item.color;                  
       this.weight = 2;
       
       this.x = $_p.random(-$_p.width / 2, $_p.width);
@@ -297,6 +373,20 @@ window.s1 =  function ($_p)  {
     let currItems = [];
     
     $_p.draw = function () {
+      const nextLevel = levels.find((level) => {
+        return duration/24 > level.durationStart;
+      });
+
+      if (nextLevel) {      
+        blueOffset = nextLevel.blueOffset;
+        itemTypes = itemTypes.concat(nextLevel.itemTypes);
+        const probabilityCalc = recalculateProbabilityRanges();
+        probabilityMax = probabilityCalc.probabilityMax;
+        probabilityRanges = probabilityCalc.probabilityRanges;
+        // remove the level from the array so it doesn't get called again
+        levels.splice(levels.indexOf(nextLevel), 1);
+      }
+
       if (keyPressed === 'left' && fireRotation > -90) {
         fireRotation -= 2
       }
@@ -304,7 +394,7 @@ window.s1 =  function ($_p)  {
       if (keyPressed === 'right' && fireRotation < 90) {
         fireRotation += 2
       }
-      $_p.background(12, 12, currBlue, 90);
+      $_p.background(12 + redOffset, 12 + greenOffset, currBlue + blueOffset, 90);
       $_p.fill(255);
       $_p.stroke(255, 0, 0);
       if (stats.energy <= 0) {
@@ -348,16 +438,20 @@ window.s1 =  function ($_p)  {
         }
         
 
-        if (stats.happiness <= 25){          
+        if (stats.happiness <= 25){      
+          redOffset = -50;  
+          greenOffset = 50;            
           stats.energy -= decrement;
           stats.mental -= decrement;
         }
 
         if (stats.energy <= 25){
+          redOffset = 50;
           stats.mental -= decrement;
         }
 
-        if (stats.mental <= 25){
+        if (stats.mental <= 25){          
+          redOffset = 50;
           stats.energy -= decrement;
         }
 
@@ -366,6 +460,7 @@ window.s1 =  function ($_p)  {
           stats.energy -= decrement;
         }
         if (stats.energy > 100) {
+          
           stats.energy = 100
         }
         if (stats.happiness > 100) {
@@ -394,7 +489,7 @@ window.s1 =  function ($_p)  {
       }
       if (start) {
         
-        $_p.background(12, 12, currBlue, 150);
+        $_p.background(12, 12, currBlue + blueOffset, 150);
         $_p.textAlign($_p.CENTER);
         $_p.rectMode($_p.CENTER);
         $_p.strokeWeight(1);
@@ -493,6 +588,9 @@ window.s1 =  function ($_p)  {
           stats = Object.assign({}, startValues);
           inactionTimer = 0;
           happinessTimer = 0;
+          greenOffset = 0;
+          blueOffset = 0;
+          redOffset = 0;
         }
         start = false
       } else if ($_p.keyCode === 32 && stats.energy > 0) {
