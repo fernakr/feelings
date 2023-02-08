@@ -178,7 +178,8 @@ window.s1 =  function ($_p)  {
         name: 'Eat',
         color: 'limegreen',        
         probability: 25,
-        values: {          
+        values: {     
+          happiness: 0,     
           energy: 3,
           mental: 1,
           money: -2
@@ -200,9 +201,9 @@ window.s1 =  function ($_p)  {
         color: 'red',        
         probability: 30,      
         values: {  
-          happiness: -3,
-          energy: -2,
-          mental: -1,
+          happiness: -5,
+          energy: -5,
+          mental: -5,
           money: 0
         }
       },
@@ -373,6 +374,9 @@ window.s1 =  function ($_p)  {
     let currItems = [];
     
     $_p.draw = function () {
+      redOffset = 0;
+      greenOffset = 0;
+      
       const nextLevel = levels.find((level) => {
         return duration/24 > level.durationStart;
       });
@@ -394,31 +398,7 @@ window.s1 =  function ($_p)  {
       if (keyPressed === 'right' && fireRotation < 90) {
         fireRotation += 2
       }
-      $_p.background(12 + redOffset, 12 + greenOffset, currBlue + blueOffset, 90);
-      $_p.fill(255);
-      $_p.stroke(255, 0, 0);
-      if (stats.energy <= 0) {
 
-        dead = true;
-        $_p.textAlign($_p.CENTER);
-        $_p.text('GAME OVER', $_p.width / 2, $_p.height / 2);
-        $_p.text('You lasted for ' + (duration/24).toFixed(1) + ' days', $_p.width / 2, $_p.height / 2 + 30);
-        $_p.textSize(15);
-        $_p.text('Hit ENTER to restart', $_p.width / 2, $_p.height / 2 + 60)
-      }
-      $_p.textAlign($_p.LEFT);
-      $_p.textSize(25);
-      
-      for (let i = 0; i < Object.values(stats).length; i++){
-        const value = Math.round(Object.values(stats)[i]);
-        $_p.fill(value > 25 ? 'white' : 'red');
-        $_p.text(Object.keys(stats)[i] + ': ' + value, 10,  $_p.height - 10 -  i * 30);        
-        $_p.textAlign($_p.LEFT);
-      }      
-
-      for (let i = 0; i < currItems.length; i++) {
-        currItems[i].display(i);
-      }
 
       if (!dead){
 
@@ -440,7 +420,7 @@ window.s1 =  function ($_p)  {
 
         if (stats.happiness <= 25){      
           redOffset = -50;  
-          greenOffset = 50;            
+          greenOffset = -50;            
           stats.energy -= decrement;
           stats.mental -= decrement;
         }
@@ -470,6 +450,32 @@ window.s1 =  function ($_p)  {
           stats.mental = 100
         }
       }
+      $_p.background(12 + redOffset, 12 + greenOffset, currBlue + blueOffset, 90);
+      $_p.fill(255);
+      $_p.stroke(255, 0, 0);
+      if (stats.energy <= 0) {
+
+        dead = true;
+        $_p.textAlign($_p.CENTER);
+        $_p.text('GAME OVER', $_p.width / 2, $_p.height / 2);
+        $_p.text('You lasted for ' + (duration/24).toFixed(1) + ' days', $_p.width / 2, $_p.height / 2 + 30);
+        $_p.textSize(15);
+        $_p.text('Hit ENTER to restart', $_p.width / 2, $_p.height / 2 + 60)
+      }
+      $_p.textAlign($_p.LEFT);
+      $_p.textSize(25);
+      
+      for (let i = 0; i < Object.values(stats).length; i++){
+        const value = Math.round(Object.values(stats)[i]);
+        $_p.fill(value > 25 ? 'white' : 'red');
+        $_p.text(Object.keys(stats)[i] + ': ' + value, 10,  $_p.height - 10 -  i * 30);        
+        $_p.textAlign($_p.LEFT);
+      }      
+
+      for (let i = 0; i < currItems.length; i++) {
+        currItems[i].display(i);
+      }
+
 
       if (stats.energy < 0) {
         stats.energy = 0
