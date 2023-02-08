@@ -199,7 +199,7 @@ window.s1 =  function ($_p)  {
       {
         name: 'Doomscroll',
         color: 'red',        
-        probability: 30,      
+        probability: 40,      
         values: {  
           happiness: -5,
           energy: -5,
@@ -255,8 +255,10 @@ window.s1 =  function ($_p)  {
       };
     };
 
-    let { probabilityRanges, probabilityMax } = recalculateProbabilityRanges();
+    
 
+    let { probabilityRanges, probabilityMax } = recalculateProbabilityRanges();
+    
     function CurrItem(item){
       this.life = 0;
       this.lifeSpan = 100;
