@@ -1,0 +1,6 @@
+.blogroll{
+    position: fixed;
+    color: #fff;
+    background-color: blue;
+    z-index: 2;
+}
