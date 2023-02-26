@@ -3,4 +3,6 @@
     color: #fff;
     background-color: blue;
     z-index: 2;
+    top: 0;
+    left: 0;
 }
