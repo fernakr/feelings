@@ -4,6 +4,7 @@ class Bingo{
     this.size = size;
     this.options = options;
     
+    this.boardElem = document.getElementById("board");
     //this.generateBoard();
   }
   shuffle(array){
@@ -49,11 +50,11 @@ class Bingo{
       if (i % this.size === 0) this.score += '\n';
       this.score += cellScore;
     }    
-    let win = false;
+    let winCount = 0;
     const lines = this.score.split('\n').filter(line => line.length > 0);
     for(let i = 0; i < lines.length; i++){
     
-      if (lines[i].indexOf('O') === -1) win = true;
+      if (lines[i].indexOf('O') === -1) winCount++;
     }  
     
     for(let i = 0; i < this.size; i++){
@@ -61,7 +62,7 @@ class Bingo{
       for(let j = 0; j < this.size; j++){
         col += lines[j][i];
       }
-      if (col.indexOf('O') === -1) win = true;
+      if (col.indexOf('O') === -1) winCount++;
     }
     
     let diag1 = '';
@@ -71,10 +72,12 @@ class Bingo{
       diag2 += lines[i][this.size - i - 1];
     }
     
-    if (diag1.indexOf('O') === -1) win = true;
+    if (diag1.indexOf('O') === -1) winCount++;
     
-    if (diag2.indexOf('O') === -1) win = true;
-    //if (win) alert("You win!");
+    if (diag2.indexOf('O') === -1) winCount++;
+    
+    if (winCount === 1 && !this.boardElem.classList.contains('win')) alert("You win?");
+    this.boardElem.classList.toggle('win', winCount > 0);
     
   }
 
@@ -97,8 +100,8 @@ class Bingo{
     this.bindEvents();    
   }
   printBoard(){    
-    const board = document.getElementById("board");
-    board.innerHTML = "";
+    
+    this.boardElem.innerHTML = "";
     for(let i = 0; i < this.size; i++){
       const row = document.createElement("div");
       row.classList.add("row");
@@ -111,7 +114,7 @@ class Bingo{
         cell.innerText = this.board[i][j];
         row.appendChild(cell);
       }
-      board.appendChild(row);
+      this.boardElem.appendChild(row);
     }
   } 
 }
