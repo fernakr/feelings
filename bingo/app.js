@@ -140,7 +140,7 @@ const options = [
   "You were disciplined for getting less than an A",
   "You were told that you are too dark / your family associated being dark with being dirty and/or poor",
   "When people start eating food from your culture, you have complicated feelings about it",
-  "Someone called you the name of another asian person",
+  "Someone has called you the name of another asian person",
   "Someone has said they were into you because of “yellow fever”",
   "Someone has assumed you like Hello Kitty or “anime”",
   "You have been told that you are “too asian” or “not asian enough”",
