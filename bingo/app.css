@@ -1,182 +1,50 @@
-/* CSS reset */
-
-body, h1 {
-    margin: 0;
-    padding: 0;
-  }
-
-  h1 {
-    text-transform: uppercase;
-  }
-
-  body {
-    color: #333;
-  }
-
-  /* Common */
-
-  .fix {
-    *zoom: 1;
-  }
-
-  .fix:after {
-    display: table;
-    clear: both;
-    content: '';
-  }
-
-  /* Home */
-
-  .wrap {
-    margin: 0 auto;
-    padding: 40px 0;
-    text-align: center;
-    position:relative;
-  }
-
-  .logo, #gameArea {
-    margin-bottom: 40px;
-  }
-
-  .ws-area, .ws-words {
-    display: inline-block;
-    vertical-align: top;
-  }
-
-  .ws-words {
-    width: 20%;
-    text-align: left;
-  }
-
-  .ws-word {
-    margin-bottom: 10px;
-    text-transform: uppercase;
-    font-family: sans-serif;
-  }
-
-  /* .ws-words ::first-letter{
-      text-transform : capitalize;
-  } */
-  /* Wordsearch */
-
-  .ws-area {
-    background: #fafafa;
-    display: inline-block;
-    padding: 20px;
-    border-radius: 10px;
-    -moz-user-select: -moz-none;
-    -khtml-user-select: none;
-    -webkit-user-select: none;
-    -ms-user-select: none;
-  }
-
-  .ws-container{
+/* .row{
     display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
     align-items: center;
-    justify-content: center;
-  }
+    align-content: center;
+} */
 
-  .ws-row {
-    line-height: 0;
-  }
+body{
+  text-align: center;
+}
 
-  .ws-col {
+.row{
+  display: table-row;
+}
+.cell{
+  display: table-cell;
+  border: 1px solid black;
+  width: 20%;
+  min-width: 100px;
+  height: 100px;
+  text-align: center;
+  vertical-align: middle;
+  padding: 10px;
+}
+  .cell:not(.free):hover{    
     cursor: pointer;
   }
 
-  .ws-col.ws-selected {
-    background: rgb(213, 255, 149);
+  .cell:not(.selected):hover{
+    background-color: pink;
   }
 
-  .ws-found--selfcare {
-    background: yellow;
+  .cell.selected{
+    background-color: hotpink;
   }
 
-  .ws-found--distraction {
-    background: orange;
-  }
+.bingo{
+  margin: auto;
+  display: table;
+}
 
-  .ws-game-over-outer {
-    background: rgba(0, 17, 24, 0.85);
-    height: 100vh;
-    left: 0;
-    position: fixed;
-    top: 0;
-    width: 100%;
-
-  }
-  .ws-game-over-outer.is-fail{
-    background: rgba(58, 17, 24, 0.85);
-  }
-
-  .ws-game-over-inner {
-    width:100%;
-    height:100%;
-    padding:0;
-    margin:0;
-    display:table;
-  }
-
-  .ws-game-over {
-    display:table-cell;
-    vertical-align:middle;
-  }
-
-
-  .ws-game-over button{
-    padding: 7px 20px;
-    font-size: 18px;
-    margin-top: 20px;
-    background: #fff;
-    font-weight: bold;
-    cursor: pointer;
-  }
-
-  .ws-game-over h2 {
-    color:#FFFFFF;
-    font-size:2em;
-    text-transform:uppercase;
-    padding:0;
-    margin:0 0 9px 0;
-  }
-
-  .ws-game-over p {
-    color:#FFFFFF;
-    font-size:1em;
-    padding:0;
-    margin:0;
-  }
-
-
-  .anxiety-bar{
-    height: 150px;
-    width: 25px;
-    margin-right: 10px;
-    margin-left: calc(20% - 25px);
-    border: 1px solid black;
-    position: relative;
-  }
-
-  .anxiety{
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    left: 0;
-    background-color: red;
-    transition: 0.3s background-color;
-  }
-
-  .anxiety.is-distracted{
-    background-color: blue;
-  }
-
-  .anxiety.is-distracted:after{
-    position: absolute;
-    right: 100%;
-    margin-right: 10px;
-    content: "Distracted";
-    text-transform: uppercase;
-    color: blue;
-    font-weight: bold;
-    font-family: sans-serif;
-  }
+button{
+  background-color: hotpink;
+  padding: 10px;
+  font-weight: bold;
+  margin-top: 20px;
+  cursor: pointer;
+}
