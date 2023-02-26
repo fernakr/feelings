@@ -139,7 +139,7 @@ const options = [
   "Your parents or grandparents risked everything to come to America",
   "You were disciplined for getting less than an A",
   "You were told that you are too dark / your family associated being dark with being dirty and/or poor",
-  "When people start eating food from your culture, you have complicated feelings about it",
+  "When non-asian people start eating food from your culture, you have complicated feelings about it",
   "Someone has called you the name of another asian person",
   "Someone has said they were into you because of “yellow fever”",
   "Someone has assumed you like Hello Kitty or “anime”",
