@@ -128,20 +128,23 @@ function morphMaker() {
   this.update = function() {       
     
 
-    background(0, 255);
-      this.state = null;
-      const distance = abs(dist(this.word.x, this.word.y, mouseX, mouseY));
+    
+    this.state = null;
+    const distance = abs(dist(this.word.x, this.word.y, mouseX, mouseY));
+    const percentage = map(distance, 0, this.translationDistance, 1, 0, true);
+    const bgColor = lerpColor(color(0, 255), color(0,0,200), percentage);
+    background(bgColor);
+    fill(255);
+    stroke(255);
+    textSize(100);
+    textAlign(LEFT, TOP);
+    const textPadding = 30;
+    textWrap(WORD);
+    //textWidth(width - textPadding * 2);
+    text(this.sentence.join(' '), textPadding, textPadding, width - textPadding * 2, height - textPadding * 2);
 
-      fill(255);
-      stroke(255);
-      textSize(100);
-      textAlign(LEFT, TOP);
-      const textPadding = 30;
-      textWrap(WORD);
-      //textWidth(width - textPadding * 2);
-      text(this.sentence.join(' '), textPadding, textPadding, width - textPadding * 2, height - textPadding * 2);
-  
 
+    noStroke();
      
     if (this.state !== 'done') {
       
@@ -155,17 +158,17 @@ function morphMaker() {
       // target
 
       cursor(ARROW);
-      fill(0);    
+      fill(bgColor);    
 
       
-      if (distance <= this.progressionDistance/2 ) {
+      if (distance <= this.progressionDistance/2 && this.state !== 'progressing') {
         fill('red');
         cursor(CROSS);    
         this.state = 'ready';
         if (mouseIsPressed) {
           this.state = 'progressing';
           this.sentence.push(this.word.text.value); 
-          console.log(this.sentence);
+          //console.log(this.sentence);
           wordIndex++;
           
           if (wordIndex >= sentences[sentenceIndex].words.length) {
@@ -186,14 +189,12 @@ function morphMaker() {
       translate(width/2, height/2);
       
 
-      fill(255);
-      if (this.state === 'progressing'){
-        fill(255,0,0);
-      }
+            
       noStroke();
       
-      const percentage = map(distance, 0, this.translationDistance, 1, 0, true);
       
+      
+      fill(255 * percentage,255,255 );
       for (let i = 0; i < this.particles.length; i++){        
         let findi = floor(
           map(i, 0, this.particles.length - 1, 0, this.word.text.points.length - 1)
