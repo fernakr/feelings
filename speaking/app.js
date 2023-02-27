@@ -146,8 +146,8 @@ function morphMaker() {
     if (this.targets.length !== this.particles.length) return;
     for (let i = 0; i < this.particles.length; i++){        
       
-      const xOffset = 0.5 * sin(frameCount * .001 + 2 * noise(this.targets[i].x, this.targets[i].y));
-      const yOffset =  0.5 * cos(frameCount * .001 + 2 * noise(this.targets[i].x, this.targets[i].y))
+      const xOffset = 0.5 * sin(frameCount * .01 + 2 * noise(this.targets[i].x, this.targets[i].y));
+      const yOffset =  0.5 * cos(frameCount * .01 + 2 * noise(this.targets[i].x, this.targets[i].y))
 
       this.particles[i].x = lerp(this.particles[i].x + xOffset, this.targets[i].x + xOffset, .05);
       this.particles[i].y = lerp(this.particles[i].y + yOffset, this.targets[i].y + yOffset, .05);
