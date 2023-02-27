@@ -65,6 +65,7 @@ function setup() {
   morpher = new morphMaker();
   morpher.setup();
   morpher.calcTargets(0);  
+  morpher.bgColorTarget = morpher.bgColor = lerpColor(color(0, 255), color(0,0,200), 0);
  // strokeCap(SQUARE);
   background(0, 255);
   sentences.forEach(sentence => {
@@ -139,7 +140,8 @@ function morphMaker() {
       this.targets[i].x = lerp(this.word.translation.points[i].x - this.word.translation.bounds.w/2, this.word.text.points[findi].x  - this.word.text.bounds.w/2, percentage);
       this.targets[i].y = lerp(this.word.translation.points[i].y - this.word.translation.bounds.h/2, this.word.text.points[findi].y - this.word.text.bounds.h/2, percentage);
       
-    }  
+    } 
+    this.bgColorTarget = lerpColor(color(0, 255), color(0,0,200), percentage); 
   }
 
   this.moveParticles = function(){
@@ -169,8 +171,8 @@ function morphMaker() {
     
     const distance = abs(dist(this.word.x, this.word.y, mouseX, mouseY));
     const percentage = map(distance, 0, this.translationDistance, 1, 0, true);
-    const bgColor = lerpColor(color(0, 255), color(0,0,200), percentage);
-    background(bgColor);
+    this.bgColor = lerpColor(this.bgColor, this.bgColorTarget, .1);
+    background(this.bgColor);
     fill(255);
     stroke(255);
     textSize(100);
@@ -195,7 +197,7 @@ function morphMaker() {
       // target
 
       cursor(ARROW);
-      fill(bgColor);    
+      fill(this.bgColor);    
 
       
       circle(this.word.x, this.word.y, this.progressionDistance + 1);
@@ -208,7 +210,7 @@ function morphMaker() {
           this.state = 'progressing';
           this.sentence.push(this.word.text.value); 
           //console.log(this.sentence);
-          background(bgColor);
+          background(this.bgColor);
           wordIndex++;
           
           this.state = null
@@ -246,7 +248,7 @@ function morphMaker() {
 
       if (this.easingTimer > 10) {
         this.easingTimer = 0;
-        this.calcTargets(percentage);  
+        this.calcTargets(percentage);          
       }
       
 
