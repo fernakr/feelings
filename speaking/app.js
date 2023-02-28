@@ -54,6 +54,7 @@ let wordIndex = 0;
 let hasMouseMoved = false;
 let sound;
 let soundOn = true;
+let reverb;
 
 function preload() {
   sound = loadSound('beep.mp3');
@@ -66,7 +67,9 @@ function preload() {
 let defaultColor, targetColor;
 
 function setup() {
-  
+  reverb = new p5.Reverb();
+  sound.disconnect();
+  reverb.process(sound, 3, 2);
   defaultColor = color(242, 226, 208);
   targetColor = color(0, 20, 80);
   const canvas = createCanvas(800, windowHeight - 200);
@@ -89,7 +92,8 @@ function setup() {
     let buttonText;
     soundOn = !soundOn;
     if (soundOn) {
-      sound.loop();
+      sound.play();                        
+
       buttonText = 'Sound Off';
     } else {
       sound.stop();
@@ -110,6 +114,7 @@ function mouseMoved(){
 function draw() {
   
   morpher.update();
+  reverb.drywet(0.5);
 }
 
 function morphMaker() {
@@ -210,11 +215,9 @@ function morphMaker() {
     
     const distance = abs(dist(this.word.x, this.word.y, mouseX, mouseY));
     const percentage = map(distance, 0, this.translationDistance, 1, 0, true);
-    // const percentageX = map(abs(dist(this.word.x, 0, mouseX, 0)), 0, this.translationDistance, 1, 0, true);
-    // const percentageY = map(abs(dist(0, this.word.y, 0, mouseY)), 0, this.translationDistance, 1, 0, true);
-
+    
     let playbackRate = lerp(0.01, 0.5, percentage);
-    //playbackRate = constrain(playbackRate, 0.01, 4);
+    
     sound.rate(playbackRate);
   
     this.bgColor = lerpColor(this.bgColor, this.bgColorTarget, .1);
@@ -226,7 +229,6 @@ function morphMaker() {
     if (hasMouseMoved){
       fill(map(distance, 0, this.translationDistance, 255, 0, true));
       this.star(this.progressionDistance, mouseX, mouseY);
-      //circle(mouseX, mouseY, this.progressionDistance);
     }    
     
 
@@ -235,7 +237,7 @@ function morphMaker() {
     fill(this.bgColor);        
     this.star(this.progressionDistance + 3, this.word.x, this.word.y)
     fill(lerpColor(color('black'), color('white'), percentage));
-    //stroke(255);
+    
     textSize(100);
     textLeading(90);
     textAlign(LEFT, TOP);

@@ -1,6 +1,8 @@
 /* CSS reset */
 
-body, h1 {
+
+
+body{
     margin: 0;
     padding: 0;
   }
