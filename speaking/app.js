@@ -203,7 +203,8 @@ function morphMaker() {
     beginShape();
     for (let i = 0; i < numPoints * 2; i++) {
       let currentRadius = i % 2 === 0 ? radius : radius/2;
-      vertex(x + currentRadius * cos(angle * i), y + currentRadius * sin(angle * i));
+      const angleStart = frameCount * .005;
+      vertex(x + currentRadius * cos(angle * i + angleStart), y + currentRadius * sin(angle * i + angleStart));
     }
     endShape(CLOSE);
   }
