@@ -75,7 +75,7 @@ function setup() {
   reverb.process(sound, 3, 2);
   defaultColor = color(242, 226, 208);
   targetColor = color(0, 20, 80);
-  const canvas = createCanvas(800, windowHeight - 200);
+  const canvas = createCanvas(900, 600);
   canvas.parent('content');
   morpher = new morphMaker();
   morpher.setup();
@@ -216,14 +216,15 @@ function morphMaker() {
   }
 
   this.star = function(radius, x, y) {    
-    let numPoints = 5;
-    let angle = TWO_PI / numPoints;
+  
     
+    // draw the sun
     beginShape();
-    for (let i = 0; i < numPoints * 2; i++) {
-      let currentRadius = i % 2 === 0 ? radius : radius/2;
-      const angleStart = frameCount * .005;
-      vertex(x + currentRadius * cos(angle * i + angleStart), y + currentRadius * sin(angle * i + angleStart));
+    for (let i = 0; i < 16; i++) {
+      let x = cos(radians(i * 22.5 - 11.25)) * 50 + 200;
+      let y = sin(radians(i * 22.5 - 11.25)) * 50 + 200;
+      vertex(x, y);
+      curveVertex(x, y);
     }
     endShape(CLOSE);
   }
