@@ -126,7 +126,7 @@ function draw() {
     textFont(myFont);
     textSize(32);
     const padding = 20;
-    translate(padding, height/4);
+    translate(padding, height/3);
     textAlign(CENTER, TOP);
     text('This is my attempt to capture the frustration I can feel trying to understand tagalog. Some phrases are easier to find than others. Either way the struggle to understand can prevent me from fully grasping the story being told.\r\n\r\nMove the cursor until you find the translation.\r\n\r\nClick to start', 0, 0, width - 2 * padding);
     //return;
@@ -216,15 +216,14 @@ function morphMaker() {
   }
 
   this.star = function(radius, x, y) {    
-  
+    let numPoints = 5;
+    let angle = TWO_PI / numPoints;
     
-    // draw the sun
     beginShape();
-    for (let i = 0; i < 16; i++) {
-      let x = cos(radians(i * 22.5 - 11.25)) * 50 + 200;
-      let y = sin(radians(i * 22.5 - 11.25)) * 50 + 200;
-      vertex(x, y);
-      curveVertex(x, y);
+    for (let i = 0; i < numPoints * 2; i++) {
+      let currentRadius = i % 2 === 0 ? radius : radius/2;
+      const angleStart = frameCount * .005;
+      vertex(x + currentRadius * cos(angle * i + angleStart), y + currentRadius * sin(angle * i + angleStart));
     }
     endShape(CLOSE);
   }
