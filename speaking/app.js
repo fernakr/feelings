@@ -64,6 +64,9 @@ function preload() {
   // myFont = loadFont("./dist/Hyperspace.ttf");
 }
 
+
+let started = false;
+
 let defaultColor, targetColor;
 
 function setup() {
@@ -111,10 +114,26 @@ function mouseMoved(){
   hasMouseMoved = true;
 }
 
-function draw() {
-  
-  morpher.update();
-  reverb.drywet(0.5);
+function mousePressed(){
+  started  = true;
+ // alert('started');
+}
+
+function draw() {  
+  if (!started){
+    background(defaultColor);
+    fill(targetColor);
+    textFont(myFont);
+    textSize(32);
+    const padding = 20;
+    translate(padding, height/4);
+    textAlign(CENTER, TOP);
+    text('This is my attempt to capture the frustration I can feel trying to understand tagalog. Some phrases are easier to find than others. Either way the struggle to understand can prevent me from fully grasping the story being told.\r\n\r\nMove the cursor until you find the translation.\r\n\r\nClick to start', 0, 0, width - 2 * padding);
+    //return;
+  }else{    
+    morpher.update();
+    reverb.drywet(0.5);
+  }
 }
 
 function morphMaker() {
