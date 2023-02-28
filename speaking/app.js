@@ -52,8 +52,12 @@ let sentenceIndex = 0;
 let wordIndex = 0;
 
 let hasMouseMoved = false;
+let sound;
+let soundOn = true;
 
 function preload() {
+  sound = loadSound('beep.mp3');
+
   // myFont = loadFont('./dist/paraaminobenzoic.ttf');
   myFont = loadFont('./dist/Retroica.ttf');
   // myFont = loadFont("./dist/Hyperspace.ttf");
@@ -79,7 +83,23 @@ function setup() {
       word.y = random(padding, height - padding);
     })
   })
-  
+  const button = document.querySelector('button');
+  button.addEventListener('click', function(e){
+    
+    let buttonText;
+    soundOn = !soundOn;
+    if (soundOn) {
+      sound.loop();
+      buttonText = 'Sound Off';
+    } else {
+      sound.stop();
+      buttonText = 'Sound On';
+    }
+    e.target.innerHTML = buttonText;
+
+  }
+  );
+
   
 }
 
@@ -100,6 +120,7 @@ function morphMaker() {
   this.easingTimer = 0;
   
   this.setup = function() {        
+    sound.loop();
     this.particles = [];
     this.word = sentences[sentenceIndex].words[wordIndex];
     this.translationDistance = 300;
@@ -185,10 +206,17 @@ function morphMaker() {
   this.update = function() {       
 
 
-  noStroke();
+    noStroke();
     
     const distance = abs(dist(this.word.x, this.word.y, mouseX, mouseY));
     const percentage = map(distance, 0, this.translationDistance, 1, 0, true);
+    // const percentageX = map(abs(dist(this.word.x, 0, mouseX, 0)), 0, this.translationDistance, 1, 0, true);
+    // const percentageY = map(abs(dist(0, this.word.y, 0, mouseY)), 0, this.translationDistance, 1, 0, true);
+
+    let playbackRate = lerp(0.01, 0.5, percentage);
+    //playbackRate = constrain(playbackRate, 0.01, 4);
+    sound.rate(playbackRate);
+  
     this.bgColor = lerpColor(this.bgColor, this.bgColorTarget, .1);
     background(this.bgColor);
 
@@ -279,3 +307,4 @@ function morphMaker() {
     
   }
 }
+
