@@ -57,7 +57,7 @@ let soundOn = true;
 let reverb;
 
 function preload() {
-  sound = loadSound('beep.mp3');
+  sound = loadSound('rough.mp3');
 
   // myFont = loadFont('./dist/paraaminobenzoic.ttf');
   myFont = loadFont('./dist/Retroica.ttf');
@@ -216,8 +216,11 @@ function morphMaker() {
     
     const distance = abs(dist(this.word.x, this.word.y, mouseX, mouseY));
     const percentage = map(distance, 0, this.translationDistance, 1, 0, true);
+    const percentageX = map(dist(this.word.x, 0, mouseX, 0), 0, this.translationDistance, 1, 0, true);
+    const percentageY = map(dist(0, this.word.y, 0, mouseY), 0, this.translationDistance, 1, 0, true);
     
-    let playbackRate = lerp(0.01, 0.5, percentage);
+//    let playbackRate = lerp(0.2, 0.6, percentageX);
+    let playbackRate = lerp(0.01, 0.5, percentageX);
     
     sound.rate(playbackRate);
   
