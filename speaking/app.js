@@ -54,7 +54,7 @@ let wordIndex = 0;
 let hasMouseMoved = false;
 let sound;
 let soundOn = true;
-let reverb;
+let reverb, distortion;
 
 function preload() {
   sound = loadSound('rough.mp3');
@@ -71,7 +71,9 @@ let defaultColor, targetColor;
 
 function setup() {
   reverb = new p5.Reverb();
+  distortion = new p5.Distortion()
   sound.disconnect();
+  
   reverb.process(sound, 3, 2);
   defaultColor = color(242, 226, 208);
   targetColor = color(0, 20, 80);
@@ -116,6 +118,7 @@ function mouseMoved(){
 
 function mousePressed(){
   started  = true;
+  sound.loop();
  // alert('started');
 }
 
@@ -132,7 +135,8 @@ function draw() {
     //return;
   }else{    
     morpher.update();
-    reverb.drywet(0.5);
+    
+    reverb.drywet(1);
   }
 }
 
@@ -144,7 +148,7 @@ function morphMaker() {
   this.easingTimer = 0;
   
   this.setup = function() {        
-    sound.loop();
+    
     this.particles = [];
     this.word = sentences[sentenceIndex].words[wordIndex];
     this.translationDistance = 300;
@@ -238,8 +242,9 @@ function morphMaker() {
     const percentageX = map(dist(this.word.x, 0, mouseX, 0), 0, this.translationDistance, 1, 0, true);
     const percentageY = map(dist(0, this.word.y, 0, mouseY), 0, this.translationDistance, 1, 0, true);
     
+    distortion.process(sound, lerp(0.06, 0, percentageY), 'none');
 //    let playbackRate = lerp(0.2, 0.6, percentageX);
-    let playbackRate = lerp(0.01, 0.5, percentageX);
+    let playbackRate = lerp(0.7, 1, percentageX);
     
     sound.rate(playbackRate);
   
