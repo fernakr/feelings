@@ -123,6 +123,9 @@ function mousePressed(){
 }
 
 function draw() {  
+  // fill(0);
+  // translate(width/2, height/2);
+  
   if (!started){
     background(defaultColor);
     fill(targetColor);
@@ -134,10 +137,13 @@ function draw() {
     text('This is my attempt to capture the frustration I can feel trying to understand tagalog. Some phrases are easier to find than others. Either way the struggle to understand can prevent me from fully grasping the story being told.\r\n\r\nMove the cursor until you find the translation.\r\n\r\nClick to start', 0, 0, width - 2 * padding);
     //return;
   }else{    
+    
+    
     morpher.update();
     
     reverb.drywet(1);
   }
+  
 }
 
 function morphMaker() {
@@ -219,17 +225,54 @@ function morphMaker() {
     }    
   }
 
-  this.star = function(radius, x, y) {    
-    let numPoints = 5;
+  this.sun = function(radius, x, y) {    
+    let numPoints = 8;
     let angle = TWO_PI / numPoints;
+   
+    let array = [
+      {x: radius / 10, y: 0},
+      {x: radius / 4.5, y: radius - radius/6},
+      {x: radius / 6.5, y: radius - radius/15},
+      {x: radius / 23, y: 0},
+      {x: radius / 25, y: 0},
+      {x: radius / 10, y: radius - radius/30},
+      {x: 0, y: radius + radius / 12},
+    ]
+
+    let mirrorArray = [...array];
+    // console.log(mirrorArray)
+    mirrorArray = mirrorArray.map(point => Object.assign({}, point, {
+       x: -point.x
+      })
+    );
+    mirrorArray.splice(-1,1);
+    mirrorArray.reverse();
+    array = [...array, ...mirrorArray];
     
-    beginShape();
-    for (let i = 0; i < numPoints * 2; i++) {
-      let currentRadius = i % 2 === 0 ? radius : radius/2;
-      const angleStart = frameCount * .005;
-      vertex(x + currentRadius * cos(angle * i + angleStart), y + currentRadius * sin(angle * i + angleStart));
+    const circleRadius = radius * 1.05;    
+    push();
+    circle(x, y, circleRadius, circleRadius);
+    translate(x, y);
+    rotate(frameCount * .01);
+    push();
+    for (let i = 0; i < numPoints; i++) {            
+      //fill('red');
+      rotate(angle * i);
+      push();
+      beginShape();      
+            
+      for (let i = 0; i < array.length; i++){
+        vertex(array[i].x, array[i].y);
+      }
+
+      
+      
+      endShape(CLOSE);
+      pop();      
     }
-    endShape(CLOSE);
+    pop();
+    pop();
+    
   }
   
   this.update = function() {       
@@ -242,9 +285,9 @@ function morphMaker() {
     const percentageX = map(dist(this.word.x, 0, mouseX, 0), 0, this.translationDistance, 1, 0, true);
     const percentageY = map(dist(0, this.word.y, 0, mouseY), 0, this.translationDistance, 1, 0, true);
     
-    distortion.process(sound, lerp(0.06, 0, percentageY), 'none');
+    distortion.process(sound, lerp(0.01, 0, percentageY), 'none');
 //    let playbackRate = lerp(0.2, 0.6, percentageX);
-    let playbackRate = lerp(0.7, 1, percentageX);
+    let playbackRate = lerp(0.95, 1, percentageX);
     
     sound.rate(playbackRate);
   
@@ -256,14 +299,14 @@ function morphMaker() {
 
     if (hasMouseMoved){
       fill(map(distance, 0, this.translationDistance, 255, 0, true));
-      this.star(this.progressionDistance, mouseX, mouseY);
+      this.sun(this.progressionDistance, mouseX, mouseY);
     }    
     
 
     // target
     cursor(ARROW);
     fill(this.bgColor);        
-    this.star(this.progressionDistance + 3, this.word.x, this.word.y)
+    this.sun(this.progressionDistance + 3, this.word.x, this.word.y)
     fill(lerpColor(color('black'), color('white'), percentage));
     
     textSize(100);
