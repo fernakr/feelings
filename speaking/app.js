@@ -225,7 +225,7 @@ function morphMaker() {
     }    
   }
 
-  this.sun = function(radius, x, y) {    
+  this.sun = function(radius, x, y, rotation) {    
     let numPoints = 8;
     let angle = TWO_PI / numPoints;
    
@@ -253,7 +253,7 @@ function morphMaker() {
     push();
     circle(x, y, circleRadius, circleRadius);
     translate(x, y);
-    rotate(frameCount * .01);
+    rotate(rotation);
     push();
     for (let i = 0; i < numPoints; i++) {            
       //fill('red');
@@ -274,6 +274,8 @@ function morphMaker() {
     pop();
     
   }
+
+  let sunRotation = 0;
   
   this.update = function() {       
 
@@ -295,18 +297,19 @@ function morphMaker() {
     background(this.bgColor);
 
 
+    sunRotation += lerp(0.008, 0.003, percentage);
     // cursor
 
     if (hasMouseMoved){
       fill(lerpColor(color('yellow'), color('black'), distance/this.translationDistance));
-      this.sun(this.progressionDistance, mouseX, mouseY);
+      this.sun(this.progressionDistance, mouseX, mouseY, sunRotation);
     }    
     
 
     // target
     cursor(ARROW);
     fill(this.bgColor);        
-    this.sun(this.progressionDistance + 3, this.word.x, this.word.y)
+    this.sun(this.progressionDistance + 3, this.word.x, this.word.y, sunRotation)
     fill(lerpColor(color('black'), color('white'), percentage));
     
     textSize(100);
