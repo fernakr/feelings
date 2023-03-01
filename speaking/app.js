@@ -298,7 +298,7 @@ function morphMaker() {
     // cursor
 
     if (hasMouseMoved){
-      fill(map(distance, 0, this.translationDistance, 255, 0, true));
+      fill(lerpColor(color('yellow'), color('black'), distance/this.translationDistance));
       this.sun(this.progressionDistance, mouseX, mouseY);
     }    
     
