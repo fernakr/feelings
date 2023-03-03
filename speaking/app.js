@@ -5,52 +5,52 @@ let myFont;
 
 // Convert the following sentences into a json array of sentences. Each sentence has a words array where each item in the array is an object with a text property that's set to the word and a translation property that's set to the translation in tagalog but keep the commas, and periods with the word right before it: I was a muse three times in my life. Your grandpa was tall, dark, handsome, scholar, and once upon a time, son of a millionaire. 
 
-// let sentences = [
-//   {
-//     words: [
-//       {
-//         text: 'test',
-//         translation: 'test'
-//       }      
-//     ]
-//   }
-// ]
-
 let sentences = [
   {
-  words: [
-  { text: 'I', translation: 'Ako' },
-  { text: 'was', translation: 'ay' },
-  { text: 'a', translation: 'isang' },
-  { text: 'muse', translation: 'muse' },
-  { text: '3', translation: 'tatlong' },
-  { text: 'times', translation: 'beses' },
-  { text: 'in', translation: 'sa' },
-  { text: 'my', translation: 'aking' },
-  { text: 'life.', translation: 'buhay.' }
-  ]
-  },
-  {
-  words: [
-  { text: 'Your', translation: 'Iyong' },
-  { text: 'grandpa', translation: 'lolo' },
-  { text: 'was', translation: 'ay' },
-  { text: 'tall,', translation: 'matangkad,' },
-  { text: 'dark,', translation: 'maitim,' },
-  { text: 'handsome,', translation: 'maganda,' },
-  { text: 'scholar,', translation: 'isipbata' },  
-  { text: 'and', translation: 'at' },
-  { text: 'once', translation: 'isa' },
-  { text: 'upon', translation: 'noong' },
-  { text: 'a', translation: 'isang' },
-  { text: 'time,', translation: 'oras,' },
-  { text: 'son', translation: 'anak' },
-  { text: 'of', translation: 'ng' },
-  { text: 'a', translation: 'isang' },
-  { text: 'millionaire.', translation: 'milyonaryo.' }
-  ]
+    words: [
+      {
+        text: 'test',
+        translation: 'test'
+      }      
+    ]
   }
 ]
+
+// let sentences = [
+//   {
+//   words: [
+//   { text: 'I', translation: 'Ako' },
+//   { text: 'was', translation: 'ay' },
+//   { text: 'a', translation: 'isang' },
+//   { text: 'muse', translation: 'muse' },
+//   { text: '3', translation: 'tatlong' },
+//   { text: 'times', translation: 'beses' },
+//   { text: 'in', translation: 'sa' },
+//   { text: 'my', translation: 'aking' },
+//   { text: 'life.', translation: 'buhay.' }
+//   ]
+//   },
+//   {
+//   words: [
+//   { text: 'Your', translation: 'Iyong' },
+//   { text: 'grandpa', translation: 'lolo' },
+//   { text: 'was', translation: 'ay' },
+//   { text: 'tall,', translation: 'matangkad,' },
+//   { text: 'dark,', translation: 'maitim,' },
+//   { text: 'handsome,', translation: 'maganda,' },
+//   { text: 'scholar,', translation: 'isipbata' },  
+//   { text: 'and', translation: 'at' },
+//   { text: 'once', translation: 'isa' },
+//   { text: 'upon', translation: 'noong' },
+//   { text: 'a', translation: 'isang' },
+//   { text: 'time,', translation: 'oras,' },
+//   { text: 'son', translation: 'anak' },
+//   { text: 'of', translation: 'ng' },
+//   { text: 'a', translation: 'isang' },
+//   { text: 'millionaire.', translation: 'milyonaryo.' }
+//   ]
+//   }
+// ]
 
 const padding = 20;
 
@@ -308,7 +308,10 @@ function morphMaker() {
     this.bgColor = lerpColor(this.bgColor, this.bgColorTarget, .1);
     background(this.bgColor);
 
-
+    textAlign(LEFT, TOP);
+    textFont(myFont);
+    textWrap(WORD);
+    const textPadding = 30;
     sunRotation += lerp(0.008, 0.003, percentage);
     if (this.state !== 'done') {
       // cursor
@@ -325,17 +328,19 @@ function morphMaker() {
       fill(this.bgColor);        
       this.sun(this.progressionDistance + 3, this.word.x, this.word.y, sunRotation)
       fill(lerpColor(color('black'), color('white'), percentage));
-    }    
+      textSize(80);
+      textLeading(70);
+          
+      text(this.sentence.join(' '), textPadding, textPadding, width - textPadding * 2, height - textPadding * 2);
+    }else{
+      textSize(40);
+      textLeading(35);
+      
+      text(this.sentence.join('\r\n'), textPadding, textPadding, width - textPadding * 2, height - textPadding * 2);
+    }
     
     
-    textSize(this.state !== 'done' ? 100 : 25);
-    textLeading(90);
-    textAlign(LEFT, TOP);
-    textFont(myFont);
-    const textPadding = 30;
-    textWrap(WORD);
-    //textWidth(width - textPadding * 2);
-    text(this.sentence.join(' '), textPadding, textPadding, width - textPadding * 2, height - textPadding * 2);
+    
 
 
     
@@ -361,7 +366,7 @@ function morphMaker() {
           if (wordIndex >= sentences[sentenceIndex].words.length) {
             wordIndex = 0;
             sentenceIndex++;
-            this.allSentences.push(this.sentence);
+            this.allSentences.push(this.sentence.join(' '));
             this.sentence = [];
             if (sentenceIndex >= sentences.length) {
               sentenceIndex = 0;
