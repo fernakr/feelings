@@ -5,52 +5,52 @@ let myFont;
 
 // Convert the following sentences into a json array of sentences. Each sentence has a words array where each item in the array is an object with a text property that's set to the word and a translation property that's set to the translation in tagalog but keep the commas, and periods with the word right before it: I was a muse three times in my life. Your grandpa was tall, dark, handsome, scholar, and once upon a time, son of a millionaire. 
 
-let sentences = [
-  {
-    words: [
-      {
-        text: 'test',
-        translation: 'test'
-      }      
-    ]
-  }
-]
-
 // let sentences = [
 //   {
-//   words: [
-//   { text: 'I', translation: 'Ako' },
-//   { text: 'was', translation: 'ay' },
-//   { text: 'a', translation: 'isang' },
-//   { text: 'muse', translation: 'muse' },
-//   { text: '3', translation: 'tatlong' },
-//   { text: 'times', translation: 'beses' },
-//   { text: 'in', translation: 'sa' },
-//   { text: 'my', translation: 'aking' },
-//   { text: 'life.', translation: 'buhay.' }
-//   ]
-//   },
-//   {
-//   words: [
-//   { text: 'Your', translation: 'Iyong' },
-//   { text: 'grandpa', translation: 'lolo' },
-//   { text: 'was', translation: 'ay' },
-//   { text: 'tall,', translation: 'matangkad,' },
-//   { text: 'dark,', translation: 'maitim,' },
-//   { text: 'handsome,', translation: 'maganda,' },
-//   { text: 'scholar,', translation: 'isipbata' },  
-//   { text: 'and', translation: 'at' },
-//   { text: 'once', translation: 'isa' },
-//   { text: 'upon', translation: 'noong' },
-//   { text: 'a', translation: 'isang' },
-//   { text: 'time,', translation: 'oras,' },
-//   { text: 'son', translation: 'anak' },
-//   { text: 'of', translation: 'ng' },
-//   { text: 'a', translation: 'isang' },
-//   { text: 'millionaire.', translation: 'milyonaryo.' }
-//   ]
+//     words: [
+//       {
+//         text: 'test',
+//         translation: 'test'
+//       }      
+//     ]
 //   }
 // ]
+
+let sentences = [
+  {
+  words: [
+  { text: 'I', translation: 'Ako' },
+  { text: 'was', translation: 'ay' },
+  { text: 'a', translation: 'isang' },
+  { text: 'muse', translation: 'muse' },
+  { text: '3', translation: 'tatlong' },
+  { text: 'times', translation: 'beses' },
+  { text: 'in', translation: 'sa' },
+  { text: 'my', translation: 'aking' },
+  { text: 'life.', translation: 'buhay.' }
+  ]
+  },
+  {
+  words: [
+  { text: 'Your', translation: 'Iyong' },
+  { text: 'grandpa', translation: 'lolo' },
+  { text: 'was', translation: 'ay' },
+  { text: 'tall,', translation: 'matangkad,' },
+  { text: 'dark,', translation: 'maitim,' },
+  { text: 'handsome,', translation: 'maganda,' },
+  { text: 'scholar,', translation: 'isipbata' },  
+  { text: 'and', translation: 'at' },
+  { text: 'once', translation: 'isa' },
+  { text: 'upon', translation: 'noong' },
+  { text: 'a', translation: 'isang' },
+  { text: 'time,', translation: 'oras,' },
+  { text: 'son', translation: 'anak' },
+  { text: 'of', translation: 'ng' },
+  { text: 'a', translation: 'isang' },
+  { text: 'millionaire.', translation: 'milyonaryo.' }
+  ]
+  }
+]
 
 const padding = 20;
 
@@ -141,9 +141,9 @@ function draw() {
     textFont(myFont);
     textSize(32);
     const padding = 20;
-    translate(padding, height/4);
+    translate(padding, height/5);
     textAlign(CENTER, TOP);
-    text('This is my attempt to capture the frustration I can feel trying to understand tagalog. Some phrases are easier to find than others. Either way the struggle to understand can prevent me from fully grasping the story being told.\r\n\r\nMove the cursor until you find the translation.\r\n\r\nClick to start', 0, 0, width - 2 * padding);
+    text('This is my attempt to capture the frustration I can feel trying to understand tagalog. Some phrases are easier to find than others. Either way the struggle to understand can prevent me from fully grasping the story being told. Chronicled here are words from my lola.\r\n\r\nMove the cursor until you find the translation.\r\n\r\nClick to start', 0, 0, width - 2 * padding);
     //return;
   }else{    
     
