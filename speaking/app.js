@@ -3,46 +3,52 @@ let morpher;
 
 let myFont;
 
+// Convert the following sentences into a json array of sentences. Each sentence has a words array where each item in the array is an object with a text property that's set to the word and a translation property that's set to the translation in tagalog but keep the commas, and periods with the word right before it: I was a muse three times in my life. Your grandpa was tall, dark, handsome, scholar, and once upon a time, son of a millionaire. 
+
+// let sentences = [
+//   {
+//     words: [
+//       {
+//         text: 'test',
+//         translation: 'test'
+//       }      
+//     ]
+//   }
+// ]
+
 let sentences = [
   {
-    words: [
-      {
-        text: 'Here',        
-        translation: 'Narito'
-      },
-      {
-        text: 'is the',        
-        translation: 'ang'
-      },
-      {
-        text: 'story',        
-        translation: 'kwento'
-      },
-      {
-        text: 'of',        
-        translation: 'kung'
-      },
-      {
-        text: 'how',        
-        translation: 'paano'
-      },
-      {
-        text: 'I',        
-        translation: 'ako'
-      },
-      {
-        text: 'came',        
-        translation: 'nakarating'
-      },
-      {
-        text: 'to',        
-        translation: 'sa'
-      },
-      {
-        text: 'America',        
-        translation: 'Amerika'
-      }
-    ]
+  words: [
+  { text: 'I', translation: 'Ako' },
+  { text: 'was', translation: 'ay' },
+  { text: 'a', translation: 'isang' },
+  { text: 'muse', translation: 'muse' },
+  { text: '3', translation: 'tatlong' },
+  { text: 'times', translation: 'beses' },
+  { text: 'in', translation: 'sa' },
+  { text: 'my', translation: 'aking' },
+  { text: 'life.', translation: 'buhay.' }
+  ]
+  },
+  {
+  words: [
+  { text: 'Your', translation: 'Iyong' },
+  { text: 'grandpa', translation: 'lolo' },
+  { text: 'was', translation: 'ay' },
+  { text: 'tall,', translation: 'matangkad,' },
+  { text: 'dark,', translation: 'maitim,' },
+  { text: 'handsome,', translation: 'maganda,' },
+  { text: 'scholar,', translation: 'isipbata' },  
+  { text: 'and', translation: 'at' },
+  { text: 'once', translation: 'isa' },
+  { text: 'upon', translation: 'noong' },
+  { text: 'a', translation: 'isang' },
+  { text: 'time,', translation: 'oras,' },
+  { text: 'son', translation: 'anak' },
+  { text: 'of', translation: 'ng' },
+  { text: 'a', translation: 'isang' },
+  { text: 'millionaire.', translation: 'milyonaryo.' }
+  ]
   }
 ]
 
@@ -54,10 +60,12 @@ let wordIndex = 0;
 let hasMouseMoved = false;
 let sound;
 let soundOn = true;
-let reverb, distortion;
+let reverb, distortion, panner;
 
 function preload() {
-  sound = loadSound('rough.mp3');
+  sound = loadSound('whoosh.mp3');
+  // decrease volume by 50%
+  sound.setVolume(0.2);
 
   // myFont = loadFont('./dist/paraaminobenzoic.ttf');
   myFont = loadFont('./dist/Retroica.ttf');
@@ -72,6 +80,7 @@ let defaultColor, targetColor;
 function setup() {
   reverb = new p5.Reverb();
   distortion = new p5.Distortion()
+  panner = new p5.Panner3D();
   sound.disconnect();
   
   reverb.process(sound, 3, 2);
@@ -149,6 +158,7 @@ function draw() {
 function morphMaker() {
 
   this.sentence = [];
+  this.allSentences = [];
   this.state = null;
   this.stateTimer = 0;
   this.easingTimer = 0;
@@ -288,8 +298,10 @@ function morphMaker() {
     const percentageY = map(dist(0, this.word.y, 0, mouseY), 0, this.translationDistance, 1, 0, true);
     
     distortion.process(sound, lerp(0.01, 0, percentageY), 'none');
+    panner.process(distortion);
+    panner.set(dist(this.word.x, 0, mouseX, 0), dist(this.word.y, 0, mouseY, 0));
 //    let playbackRate = lerp(0.2, 0.6, percentageX);
-    let playbackRate = lerp(0.95, 1, percentageX);
+    let playbackRate = lerp(0.97, 1, percentageX);
     
     sound.rate(playbackRate);
   
@@ -298,21 +310,25 @@ function morphMaker() {
 
 
     sunRotation += lerp(0.008, 0.003, percentage);
-    // cursor
+    if (this.state !== 'done') {
+      // cursor
 
-    if (hasMouseMoved){
-      fill(lerpColor(color('yellow'), color('black'), distance/this.translationDistance));
-      this.sun(this.progressionDistance, mouseX, mouseY, sunRotation);
+      if (hasMouseMoved){
+        fill(lerpColor(color('yellow'), color('black'), distance/this.translationDistance));
+        this.sun(this.progressionDistance, mouseX, mouseY, sunRotation);
+      }    
+    
+
+    
+      // target
+      cursor(ARROW);
+      fill(this.bgColor);        
+      this.sun(this.progressionDistance + 3, this.word.x, this.word.y, sunRotation)
+      fill(lerpColor(color('black'), color('white'), percentage));
     }    
     
-
-    // target
-    cursor(ARROW);
-    fill(this.bgColor);        
-    this.sun(this.progressionDistance + 3, this.word.x, this.word.y, sunRotation)
-    fill(lerpColor(color('black'), color('white'), percentage));
     
-    textSize(100);
+    textSize(this.state !== 'done' ? 100 : 25);
     textLeading(90);
     textAlign(LEFT, TOP);
     textFont(myFont);
@@ -333,9 +349,10 @@ function morphMaker() {
 
         cursor(CROSS);    
         this.state = 'ready';
-        if (mouseIsPressed || distance < 5) {
+        if (mouseIsPressed || distance < 10) {
           this.state = 'progressing';
           this.sentence.push(this.word.text.value); 
+        
           //console.log(this.sentence);
           background(this.bgColor);
           wordIndex++;
@@ -344,9 +361,13 @@ function morphMaker() {
           if (wordIndex >= sentences[sentenceIndex].words.length) {
             wordIndex = 0;
             sentenceIndex++;
+            this.allSentences.push(this.sentence);
+            this.sentence = [];
             if (sentenceIndex >= sentences.length) {
               sentenceIndex = 0;
-              alert('done');
+              //alert('done');
+              this.sentence = this.allSentences;
+              background(this.bgColor);
               this.state = 'done';
             }
           }
