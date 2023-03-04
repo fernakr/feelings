@@ -1,0 +1,40 @@
+/* CSS reset */
+
+
+
+body{
+    margin: 0;
+    padding: 0;
+  }
+
+  h1 {
+    text-transform: uppercase;
+  }
+
+  body {
+    color: #333;
+  }
+
+  /* Common */
+
+  .fix {
+    *zoom: 1;
+  }
+
+  .fix:after {
+    display: table;
+    clear: both;
+    content: '';
+  }
+
+  /* Home */
+
+  .wrap {
+    margin: 0 auto;
+    padding: 40px 0;
+    text-align: center;
+    position:relative;
+  }
+button{
+  margin-top: 20px;  
+}

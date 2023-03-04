@@ -77,14 +77,33 @@ let hasMouseMoved = false;
 let sound;
 let soundOn = true;
 let reverb, distortion, panner;
+let graphics;
 
 function preload() {
+  createVRCanvas();
   sound = loadSound('whoosh.mp3');
   // decrease volume by 50%
   sound.setVolume(0.2);
 
   // myFont = loadFont('./dist/paraaminobenzoic.ttf');
-  myFont = loadFont('./dist/Retroica.ttf');
+  myFont =  loadFont('./fonts/linarc.ttf', () => {
+    
+    morpher = new morphMaker();
+    morpher.setup();
+    morpher.calcTargets(0);  
+    morpher.bgColorTarget = morpher.bgColor = graphics.lerpColor(defaultColor, targetColor, 0); 
+    graphics.background(0, 255);
+    sentences.forEach(sentence => {
+      sentence.words.forEach(word => {
+        word.x = graphics.random(padding, width - padding);
+        word.y = graphics.random(padding, height - padding);
+      })
+    })
+  }, () => {
+    //console.log('error')
+    });
+  //console.log(myFont);
+  
   // myFont = loadFont("./dist/Hyperspace.ttf");
 }
 
@@ -94,27 +113,18 @@ let started = false;
 let defaultColor, targetColor;
 
 function setup() {
+  graphics = createGraphics(600,600);
+
   reverb = new p5.Reverb();
   distortion = new p5.Distortion()
   panner = new p5.Panner3D();
   sound.disconnect();
   
   reverb.process(sound, 3, 2);
-  defaultColor = color(242, 226, 208);
-  targetColor = color(0, 20, 80);
-  const canvas = createCanvas(900, 600);
-  canvas.parent('content');
-  morpher = new morphMaker();
-  morpher.setup();
-  morpher.calcTargets(0);  
-  morpher.bgColorTarget = morpher.bgColor = lerpColor(defaultColor, targetColor, 0); 
-  background(0, 255);
-  sentences.forEach(sentence => {
-    sentence.words.forEach(word => {
-      word.x = random(padding, width - padding);
-      word.y = random(padding, height - padding);
-    })
-  })
+  defaultColor = graphics.color(242, 226, 208);
+  targetColor = graphics.color(0, 20, 80);
+  
+  
   const button = document.querySelector('button');
   button.addEventListener('click', function(e){
     
@@ -149,14 +159,14 @@ function mousePressed(){
 function draw() {  
   
   if (!started){
-    background(defaultColor);
-    fill(targetColor);
-    textFont(myFont);
-    textSize(32);
+    graphics.background(defaultColor);
+    graphics.fill(targetColor);
+    //graphics.textFont(myFont);
+    graphics.textFont(32);
     const padding = 20;
-    translate(padding, height/5);
-    textAlign(CENTER, TOP);
-    text('This is my attempt to capture the frustration I can feel trying to understand tagalog. Some phrases are easier to find than others. Either way the struggle to understand can prevent me from fully grasping the story being told. Chronicled here are words from my lola.\r\n\r\nMove the cursor until you find the translation.\r\n\r\nClick to start', 0, 0, width - 2 * padding);
+    graphics.translate(padding, height/5);
+    graphics.textFont(CENTER, TOP);
+    graphics.textFont('This is my attempt to capture the frustration I can feel trying to understand tagalog. Some phrases are easier to find than others. Either way the struggle to understand can prevent me from fully grasping the story being told. Chronicled here are words from my lola.\r\n\r\nMove the cursor until you find the translation.\r\n\r\nClick to start', 0, 0, width - 2 * padding);
     //return;
   }else{    
     
@@ -215,33 +225,33 @@ function morphMaker() {
     this.targets = [];
     for (let i = 0; i < this.particles.length; i++){     
       this.targets[i] = {};   
-      let findi = floor(
-        map(i, 0, this.particles.length - 1, 0, this.word.text.points.length - 1)
+      let findi = graphics.floor(
+        graphics.map(i, 0, this.particles.length - 1, 0, this.word.text.points.length - 1)
       );          
       
-      this.targets[i].x = lerp(this.word.translation.points[i].x - this.word.translation.bounds.w/2, this.word.text.points[findi].x  - this.word.text.bounds.w/2, percentage);
-      this.targets[i].y = lerp(this.word.translation.points[i].y - this.word.translation.bounds.h/2, this.word.text.points[findi].y - this.word.text.bounds.h/2, percentage);
+      this.targets[i].x = graphics.lerp(this.word.translation.points[i].x - this.word.translation.bounds.w/2, this.word.text.points[findi].x  - this.word.text.bounds.w/2, percentage);
+      this.targets[i].y = graphics.lerp(this.word.translation.points[i].y - this.word.translation.bounds.h/2, this.word.text.points[findi].y - this.word.text.bounds.h/2, percentage);
       
     } 
-    this.bgColorTarget = lerpColor(defaultColor, targetColor, percentage); 
+    this.bgColorTarget = graphics.lerpColor(defaultColor, targetColor, percentage); 
   }
 
   this.moveParticles = function(){
     if (this.targets.length !== this.particles.length) return;
     for (let i = 0; i < this.particles.length; i++){        
       
-      const xOffset = 0.75 * sin(frameCount * .01 + 2 * noise(this.targets[i].x, this.targets[i].y));
-      const yOffset =  0.75 * cos(frameCount * .01 + 2 * noise(this.targets[i].x, this.targets[i].y))
+      const xOffset = 0.75 * graphics.sin(frameCount * .01 + 2 * graphics.noise(this.targets[i].x, this.targets[i].y));
+      const yOffset =  0.75 * graphics.cos(frameCount * .01 + 2 * graphics.noise(this.targets[i].x, this.targets[i].y))
 
-      const lerpFactor = map(i, 0, this.particles.length - 1, .05, .25, true);
+      const lerpFactor = graphics.map(i, 0, this.particles.length - 1, .05, .25, true);
 
-      this.particles[i].x = lerp(this.particles[i].x + xOffset, this.targets[i].x + xOffset, lerpFactor);
-      this.particles[i].y = lerp(this.particles[i].y + yOffset, this.targets[i].y + yOffset, lerpFactor * 3);
+      this.particles[i].x = graphics.lerp(this.particles[i].x + xOffset, this.targets[i].x + xOffset, lerpFactor);
+      this.particles[i].y = graphics.lerp(this.particles[i].y + yOffset, this.targets[i].y + yOffset, lerpFactor * 3);
       
       for (let j = -1; j <= 1; j+=2){
         for (let k = -1; k <= 1; k+=2){
 
-          circle(this.particles[i].x + k, this.particles[i].y + j, 1, 1);
+          graphics.circle(this.particles[i].x + k, this.particles[i].y + j, 1, 1);
         }
       }      
     }    
@@ -271,16 +281,16 @@ function morphMaker() {
     array = [...array, ...mirrorArray];
     
     const circleRadius = radius * 1.05;    
-    push();
-    circle(x, y, circleRadius, circleRadius);
-    translate(x, y);
-    rotate(rotation);
-    push();
+    graphics.push();
+    graphics.circle(x, y, circleRadius, circleRadius);
+    graphics.translate(x, y);
+    graphics.rotate(rotation);
+    graphics.push();
     for (let i = 0; i < numPoints; i++) {            
-      //fill('red');
-      rotate(angle * i);
-      push();
-      beginShape();      
+      //graphics.fill('red');
+      graphics.rotate(angle * i);
+      graphics.push();
+      graphics.beginShape();      
             
       for (let i = 0; i < array.length; i++){
         vertex(array[i].x, array[i].y);
@@ -288,11 +298,11 @@ function morphMaker() {
 
       
       
-      endShape(CLOSE);
-      pop();      
+      graphics.endShape(CLOSE);
+      graphics.pop();      
     }
-    pop();
-    pop();
+    graphics.pop();
+    graphics.pop();
     
   }
 
@@ -304,55 +314,55 @@ function morphMaker() {
     noStroke();
     
     const distance = abs(dist(this.word.x, this.word.y, mouseX, mouseY));
-    const percentage = map(distance, 0, this.translationDistance, 1, 0, true);
-    const percentageX = map(dist(this.word.x, 0, mouseX, 0), 0, this.translationDistance, 1, 0, true);
-    const percentageY = map(dist(0, this.word.y, 0, mouseY), 0, this.translationDistance, 1, 0, true);
+    const percentage = graphics.map(distance, 0, this.translationDistance, 1, 0, true);
+    const percentageX = graphics.map(dist(this.word.x, 0, mouseX, 0), 0, this.translationDistance, 1, 0, true);
+    const percentageY = graphics.map(dist(0, this.word.y, 0, mouseY), 0, this.translationDistance, 1, 0, true);
     
-    distortion.process(sound, lerp(0.01, 0, percentageY), 'none');
+    distortion.process(sound, graphics.lerp(0.01, 0, percentageY), 'none');
     panner.process(distortion);
     panner.set(dist(this.word.x, 0, mouseX, 0), dist(this.word.y, 0, mouseY, 0));
   
-    this.bgColor = lerpColor(this.bgColor, this.bgColorTarget, .1);
-    background(this.bgColor);
+    this.bgColor = graphics.lerpColor(this.bgColor, this.bgColorTarget, .1);
+    graphics.background(this.bgColor);
 
-    textAlign(LEFT, TOP);
-    textFont(myFont);
-    textWrap(WORD);
+    graphics.textFont(LEFT, TOP);
+    //graphics.textFont(myFont);
+    graphics.textWrap(WORD);
     const textPadding = 30;
-    sunRotation += lerp(0.008, 0.003, percentage);
-    push();
-    translate(0, 20);
+    sunRotation += graphics.lerp(0.008, 0.003, percentage);
+    graphics.push();
+    graphics.translate(0, 20);
     for (let i = 0; i < this.allSentences.length; i++){
       
-      fill(lerpColor(color('yellow'), color('black'), distance/this.translationDistance));
+      graphics.fill(graphics.lerpColor(graphics.color('yellow'), graphics.color('black'), distance/this.translationDistance));
       const sunSize = 30;
       this.sun(15, 30 + (10 + sunSize) * i, height - sunSize -  20, 0);
     }
-    pop();
+    graphics.pop();
     if (this.state !== 'done') {
       // cursor
 
       if (hasMouseMoved){
-        fill(lerpColor(color('yellow'), color('black'), distance/this.translationDistance));
+        graphics.fill(graphics.lerpColor(graphics.color('yellow'), graphics.color('black'), distance/this.translationDistance));
         this.sun(this.progressionDistance, mouseX, mouseY, sunRotation);
       }    
     
 
     
       // target
-      cursor(ARROW);
-      fill(this.bgColor);        
+      //graphics.cursor(ARROW);
+      graphics.fill(this.bgColor);        
       this.sun(this.progressionDistance + 3, this.word.x, this.word.y, sunRotation)
-      fill(lerpColor(color('black'), color('white'), percentage));
-      textSize(80);
-      textLeading(70);
+      graphics.fill(graphics.lerpColor(graphics.color('black'), graphics.color('white'), percentage));
+      graphics.textFont(80);
+      graphics.textLeading(70);
           
-      text(this.sentence.join(' '), textPadding, textPadding, width - textPadding * 2, height - textPadding * 2);
+      graphics.text(this.sentence.join(' '), textPadding, textPadding, width - textPadding * 2, height - textPadding * 2);
     }else{
-      textSize(40);
-      textLeading(35);
+      graphics.textFont(40);
+      graphics.textLeading(35);
       
-      text(this.sentence.join('\r\n'), textPadding, textPadding, width - textPadding * 2, height - textPadding * 2);
+      graphics.text(this.sentence.join('\r\n'), textPadding, textPadding, width - textPadding * 2, height - textPadding * 2);
     }
     
     
@@ -368,24 +378,24 @@ function morphMaker() {
       this.state = null;
       if (distance <= this.progressionDistance/2 && this.state !== 'progressing') {                
 
-        cursor(CROSS);    
+        graphics.cursor(CROSS);    
         this.state = 'ready';
         if (mouseIsPressed || distance < 10) {
           this.state = 'progressing';
-          this.sentence.push(this.word.text.value);       
-          background(this.bgColor);
+          this.sentence.graphics.push(this.word.text.value);       
+          graphics.background(this.bgColor);
           wordIndex++;
                     
           if (wordIndex >= sentences[sentenceIndex].words.length) {
             wordIndex = 0;
             sentenceIndex++;
-            this.allSentences.push(this.sentence.join(' '));
+            this.allSentences.graphics.push(this.sentence.join(' '));
             this.sentence = [];
             if (sentenceIndex >= sentences.length) {
               sentenceIndex = 0;
               //alert('done');
               this.sentence = this.allSentences;
-              background(this.bgColor);
+              graphics.background(this.bgColor);
               this.state = 'done';
             }
           }
@@ -395,15 +405,15 @@ function morphMaker() {
       
 
 
-      translate(width/2, height/2);
+      graphics.translate(width/2, height/2);
       
 
             
-      noStroke();          
+      graphics.noStroke();          
 
       // text + translation
-      // const textColor = lerpColor(color('black'), color('white'), percentage);
-      // fill(textColor);
+      // const textColor = graphics.lerpColor(graphics.color('black'), graphics.color('white'), percentage);
+      // graphics.fill(textColor);
       
       this.easingTimer++;
 
