@@ -3,7 +3,13 @@ let morpher;
 
 let myFont;
 
-// Convert the following sentences into a json array of sentences. Each sentence has a words array where each item in the array is an object with a text property that's set to the word and a translation property that's set to the translation in tagalog but keep the commas, and periods with the word right before it: I was a muse three times in my life. Your grandpa was tall, dark, handsome, scholar, and once upon a time, son of a millionaire. 
+let string = `Convert the following sentences into a json array of sentences. Each sentence has a words array where each item in the array is an object with a text property that's set to the word and a translation property that's set to the translation in tagalog but make sure to keep the commas and periods in the sentence with the word right before it: 
+- I was a muse three times in my life
+- Your grandpa was tall, dark, handsome, and once upon a time a millionaire
+- I was born in the third house from the municipal building in front of the church
+- Your grandpa was asked by President Ramos to lead the charge to get rid of corruption in Philippines and said no
+- Your grandpa and I were never were boyfriend/girlfriend when we got married
+`
 
 // let sentences = [
 //   {
@@ -49,7 +55,28 @@ let sentences = [
   { text: 'a', translation: 'isang' },
   { text: 'millionaire.', translation: 'milyonaryo.' }
   ]
-  }
+  },
+  {
+    "sentence": "I was born in the third house from the municipal building in front of the church",
+    "words": [
+      { "text": "I", "translation": "ako" },
+      { "text": "was", "translation": "ay" },
+      { "text": "born", "translation": "ipinanganak" },
+      { "text": "in", "translation": "sa" },
+      { "text": "the", "translation": "ang" },
+      { "text": "third", "translation": "ikalawa" },
+      { "text": "house", "translation": "bahay" },
+      { "text": "from", "translation": "mula sa" },
+      { "text": "the", "translation": "ang" },
+      { "text": "municipal", "translation": "munisipal" },
+      { "text": "building", "translation": "gusali ng munisipyo" },
+      { "text": "in", "translation": "sa" },
+      { "text": "front", "translation": "harapan" },
+      { "text": "of", "translation": "ng" },
+      { "text": "the", "translation": "ang" },
+      { "text": "church", "translation": "simbahan" }
+    ]
+  },
 ]
 
 const padding = 20;
@@ -301,9 +328,9 @@ function morphMaker() {
     panner.process(distortion);
     panner.set(dist(this.word.x, 0, mouseX, 0), dist(this.word.y, 0, mouseY, 0));
 //    let playbackRate = lerp(0.2, 0.6, percentageX);
-    let playbackRate = lerp(0.97, 1, percentageX);
+    // let playbackRate = lerp(0.97, 1, percentageX);
     
-    sound.rate(playbackRate);
+    //sound.rate();
   
     this.bgColor = lerpColor(this.bgColor, this.bgColorTarget, .1);
     background(this.bgColor);
@@ -313,6 +340,15 @@ function morphMaker() {
     textWrap(WORD);
     const textPadding = 30;
     sunRotation += lerp(0.008, 0.003, percentage);
+    push();
+    translate(0, 20);
+    for (let i = 0; i < this.allSentences.length; i++){
+      
+      fill(lerpColor(color('yellow'), color('black'), distance/this.translationDistance));
+      const sunSize = 30;
+      this.sun(15, 30 + (10 + sunSize) * i, height - sunSize -  20, 0);
+    }
+    pop();
     if (this.state !== 'done') {
       // cursor
 
