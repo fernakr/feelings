@@ -113,7 +113,7 @@ let started = false;
 let defaultColor, targetColor;
 
 function setup() {
-  graphics = createGraphics(600,600);
+  graphics = createGraphics(800,800);
 
   reverb = new p5.Reverb();
   distortion = new p5.Distortion()
@@ -157,6 +157,7 @@ function mousePressed(){
 }
 
 function draw() {  
+  
   
   if (!started){
     graphics.background(defaultColor);
@@ -251,7 +252,11 @@ function morphMaker() {
       for (let j = -1; j <= 1; j+=2){
         for (let k = -1; k <= 1; k+=2){
 
+          graphics.push();
+          graphics.translate(this.particles[i].x + k, this.particles[i].y + j);
           graphics.circle(this.particles[i].x + k, this.particles[i].y + j, 1, 1);
+
+          graphics.pop();
         }
       }      
     }    

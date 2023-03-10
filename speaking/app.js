@@ -1,7 +1,4 @@
 
-let morpher;
-
-let myFont;
 
 let string = `Convert the following sentences into a json array of sentences. Each sentence has a words array where each item in the array is an object with a text property that's set to the word and a translation property that's set to the translation in tagalog but make sure to keep the commas and periods in the sentence with the word right before it: 
 - I was a muse three times in my life
@@ -11,7 +8,10 @@ let string = `Convert the following sentences into a json array of sentences. Ea
 - Your grandpa and I were never were boyfriend/girlfriend when we got married
 `
 
+let morpher;
+let myFont;
 let sentences = [
+
   {
   words: [
   { text: 'I', translation: 'Ako' },
@@ -175,7 +175,7 @@ function morphMaker() {
   this.sentence = [];
   this.allSentences = [];
   this.state = null;
-  this.stateTimer = 0;
+  //this.stateTimer = 0;
   this.easingTimer = 0;
   
   this.setup = function() {        
@@ -324,7 +324,7 @@ function morphMaker() {
     translate(0, 20);
     for (let i = 0; i < this.allSentences.length; i++){
       
-      fill(lerpColor(color('yellow'), color('black'), distance/this.translationDistance));
+      fill(lerpColor(color('yellow'), color('black'), percentage));
       const sunSize = 30;
       this.sun(15, 30 + (10 + sunSize) * i, height - sunSize -  20, 0);
     }
@@ -342,7 +342,9 @@ function morphMaker() {
       // target
       cursor(ARROW);
       fill(this.bgColor);        
-      this.sun(this.progressionDistance + 3, this.word.x, this.word.y, sunRotation)
+      if (this.state !== 'progressing'){
+        this.sun(this.progressionDistance + 3, this.word.x, this.word.y, sunRotation)
+      }      
       fill(lerpColor(color('black'), color('white'), percentage));
       textSize(80);
       textLeading(70);
@@ -351,48 +353,61 @@ function morphMaker() {
     }else{
       textSize(40);
       textLeading(35);
-      
+      fill(lerpColor(color('black'), color('white'), percentage));
       text(this.sentence.join('\r\n'), textPadding, textPadding, width - textPadding * 2, height - textPadding * 2);
     }
     
     
+    if (this.stateDuration && this.stateTimer < this.stateDuration) {
+      this.stateTimer++;
+    }
+
+
+    if (this.stateTimer === this.stateDuration) {
+      this.stateDuration = null;
+      this.stateTimer = 0;
+      if (this.state === 'progressing') {
+
+        this.state = null;
+        wordIndex++;
+                  
+        if (wordIndex >= sentences[sentenceIndex].words.length) {
+          this.state = null;
+          wordIndex = 0;
+          sentenceIndex++;
+          this.allSentences.push(this.sentence.join(' '));
+          this.sentence = [];
+          if (sentenceIndex >= sentences.length) {
+            sentenceIndex = 0;            
+            this.sentence = this.allSentences;            
+            this.state = 'done';
+          }
+        }
+        if (this.state !== 'done') this.setup();
+      }
+    }
     
-
-
     
      
-    if (this.state !== 'done') {
-      
-
-      
-      this.state = null;
+    if (this.state !== 'done' && this.state !== 'progressing') {
+                
       if (distance <= this.progressionDistance/2 && this.state !== 'progressing') {                
 
         cursor(CROSS);    
-        this.state = 'ready';
+        
         if (mouseIsPressed || distance < 10) {
           this.state = 'progressing';
           this.sentence.push(this.word.text.value);       
-          background(this.bgColor);
-          wordIndex++;
-                    
-          if (wordIndex >= sentences[sentenceIndex].words.length) {
-            wordIndex = 0;
-            sentenceIndex++;
-            this.allSentences.push(this.sentence.join(' '));
-            this.sentence = [];
-            if (sentenceIndex >= sentences.length) {
-              sentenceIndex = 0;
-              //alert('done');
-              this.sentence = this.allSentences;
-              background(this.bgColor);
-              this.state = 'done';
-            }
-          }
-          if (this.state !== 'done') this.setup();
+
+          this.stateDuration = 100;
+          this.stateTimer = 0;
+          
         }        
       }
-      
+
+
+ 
+
 
 
       translate(width/2, height/2);
