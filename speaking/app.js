@@ -109,6 +109,7 @@ function setup() {
   morpher.calcTargets(0);  
   morpher.bgColorTarget = morpher.bgColor = lerpColor(defaultColor, targetColor, 0); 
   background(0, 255);
+
   sentences.forEach(sentence => {
     sentence.words.forEach(word => {
       word.x = random(padding, width - padding);
@@ -311,9 +312,15 @@ function morphMaker() {
     distortion.process(sound, lerp(0.01, 0, percentageY), 'none');
     panner.process(distortion);
     panner.set(dist(this.word.x, 0, mouseX, 0), dist(this.word.y, 0, mouseY, 0));
-  
     this.bgColor = lerpColor(this.bgColor, this.bgColorTarget, .1);
-    background(this.bgColor);
+    if (this.state === 'progressing'){
+      background(color(this.bgColor), 0);
+      //this.stateTimer/this.stateDuration
+    }else{
+      
+      background(this.bgColor);
+    }
+   
 
     textAlign(LEFT, TOP);
     textFont(myFont);
@@ -324,7 +331,7 @@ function morphMaker() {
     translate(0, 20);
     for (let i = 0; i < this.allSentences.length; i++){
       
-      fill(lerpColor(color('yellow'), color('black'), percentage));
+      fill(lerpColor(color('yellow'), color('black'), distance/this.translationDistance));
       const sunSize = 30;
       this.sun(15, 30 + (10 + sunSize) * i, height - sunSize -  20, 0);
     }
@@ -344,8 +351,10 @@ function morphMaker() {
       fill(this.bgColor);        
       if (this.state !== 'progressing'){
         this.sun(this.progressionDistance + 3, this.word.x, this.word.y, sunRotation)
-      }      
-      fill(lerpColor(color('black'), color('white'), percentage));
+        fill(lerpColor(color('black'), color('white'), percentage));
+      }else{
+        fill(lerpColor(color('black'), color('white'), this.stateTimer/this.stateDuration));
+      }
       textSize(80);
       textLeading(70);
           
@@ -353,13 +362,14 @@ function morphMaker() {
     }else{
       textSize(40);
       textLeading(35);
-      fill(lerpColor(color('black'), color('white'), percentage));
+      
       text(this.sentence.join('\r\n'), textPadding, textPadding, width - textPadding * 2, height - textPadding * 2);
     }
     
     
     if (this.stateDuration && this.stateTimer < this.stateDuration) {
       this.stateTimer++;
+      
     }
 
 
@@ -367,6 +377,7 @@ function morphMaker() {
       this.stateDuration = null;
       this.stateTimer = 0;
       if (this.state === 'progressing') {
+
 
         this.state = null;
         wordIndex++;
