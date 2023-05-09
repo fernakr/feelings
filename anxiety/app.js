@@ -315,7 +315,7 @@ if (typeof Object.merge != 'function') {
                     y = cvEl.height / 2;
 
                 var ctx = cvEl.getContext('2d');
-                ctx.font = '400 24px Times New Roman, sans serif';
+                ctx.font = '400 22px Futura, sans serif';
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
                 ctx.fillStyle = '#333'; // Text color

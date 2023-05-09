@@ -1,16 +1,48 @@
 /* CSS reset */
 
+/* set css variables */
+
+:root{
+  --primary-color-lightest: #E7F6E9;
+  --primary-color-lighter: #95AD96;
+  --primary-color: #5B765C;
+  --primary-color-darker: #425D42;
+  --primary-color-darkest: #263126;
+
+  --secondary-color-light: #A2C8DC;
+}
+
+@font-face{
+  font-family: 'Daydream';
+  src: url('./shared/fonts/Daydream.ttf');
+}
+
 body, h1 {
     margin: 0;
+    font-family: 'Futura', sans-serif;
     padding: 0;
+  }
+  a{
+    color: inherit;
   }
 
   h1 {
     text-transform: uppercase;
+    font-family: 'Daydream', sans-serif;
+    margin-bottom: 0;    
+  }
+
+  h1, h2{
+    text-shadow: 2px 1px 1px var(--primary-color-lighter);
+  }
+
+  h2{
+    margin: 0;
   }
 
   body {
-    color: #333;
+    background-color: var(--primary-color-lightest);
+    color: var(--primary-color-darkest);
   }
 
   /* Common */
@@ -34,9 +66,9 @@ body, h1 {
     position:relative;
   }
 
-  .logo, #gameArea {
+  /* .logo, #gameArea {
     margin-bottom: 40px;
-  }
+  } */
 
   .ws-area, .ws-words {
     display: inline-block;
@@ -51,7 +83,7 @@ body, h1 {
   .ws-word {
     margin-bottom: 10px;
     text-transform: uppercase;
-    font-family: sans-serif;
+    letter-spacing: 1px;    
   }
 
   /* .ws-words ::first-letter{
@@ -59,8 +91,7 @@ body, h1 {
   } */
   /* Wordsearch */
 
-  .ws-area {
-    background: #fafafa;
+  .ws-area {    
     display: inline-block;
     padding: 20px;
     border-radius: 10px;
@@ -89,15 +120,15 @@ body, h1 {
   }
 
   .ws-found--selfcare {
-    background: yellow;
+    background: var(--secondary-color-light);
   }
 
   .ws-found--distraction {
-    background: orange;
+    background: var(--primary-color-lighter);
   }
 
   .ws-game-over-outer {
-    background: rgba(0, 17, 24, 0.85);
+    background: rgba(104,200,200, 0.85);
     height: 100vh;
     left: 0;
     position: fixed;
@@ -106,7 +137,7 @@ body, h1 {
 
   }
   .ws-game-over-outer.is-fail{
-    background: rgba(58, 17, 24, 0.85);
+    background: rgba(26, 31, 26, 0.85);
   }
 
   .ws-game-over-inner {
@@ -153,8 +184,8 @@ body, h1 {
     width: 25px;
     margin-right: 10px;
     margin-left: calc(20% - 25px);
-    border: 1px solid black;
-    position: relative;
+    border: 1px solid var(--primary-color-darkest);
+    position: relative;    
   }
 
   .anxiety{
@@ -162,12 +193,12 @@ body, h1 {
     bottom: 0;
     width: 100%;
     left: 0;
-    background-color: red;
+    background-color: var(--primary-color-darkest);
     transition: 0.3s background-color;
   }
 
   .anxiety.is-distracted{
-    background-color: blue;
+    background-color: var(--primary-color);
   }
 
   .anxiety.is-distracted:after{
@@ -176,7 +207,6 @@ body, h1 {
     margin-right: 10px;
     content: "Distracted";
     text-transform: uppercase;
-    color: blue;
-    font-weight: bold;
-    font-family: sans-serif;
+    color: var(--primary-color);
+    font-weight: bold;    
   }
