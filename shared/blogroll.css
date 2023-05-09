@@ -1,8 +1,16 @@
 .blogroll{
-    position: fixed;
-    color: #fff;
-    background-color: blue;
+    position: fixed;    
     z-index: 2;
     top: 0;
     left: 0;
+    padding: 10px;
+    
+}
+
+.blogroll:before{
+    /* double angle left */
+    content: '\00ab';   
+    display: inline-block;
+    margin-right: 0.5ch; 
+
 }
