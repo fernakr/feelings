@@ -1,19 +1,47 @@
 /* CSS reset */
 
+:root{
+  --primary-color-lightest: #F2D5C8;
+  --primary-color-lighter: #E3BCAB;
+  --primary-color: #D19D86;
+  --primary-color-darker: #B5836E;
+  --secondary-color: #8C2710;
+  --secondary-color-darker: #532312;
+}
 
+
+
+@font-face{
+  font-family: 'pixelplay';
+  src: url('./shared/fonts/pixelplay.ttf');
+}
+
+
+html, body{
+  font-family: 'Futura', sans-serif;
+  height: 100%;
+  color: var(--secondary-color-darker);
+}
+
+a{
+  color: inherit;
+}
 
 body{
     margin: 0;
     padding: 0;
+    background-color: var(--primary-color-lightest);
+    display: flex;
+    flex-direction: column;
+    align-items: center;    
+    justify-content: center;
   }
 
-  h1 {
-    text-transform: uppercase;
+  canvas{
+    border-radius: 20px;
   }
 
-  body {
-    color: #333;
-  }
+  
 
   /* Common */
 
@@ -30,11 +58,17 @@ body{
   /* Home */
 
   .wrap {
-    margin: 0 auto;
-    padding: 40px 0;
+    margin: 0 auto;    
     text-align: center;
     position:relative;
+    
   }
 button{
   margin-top: 20px;  
+  background-color: var(--secondary-color-darker);
+  border: 0;
+  color: var(--primary-color-lightest);
+  padding: 10px 15px;
+  font-weight: bold;
+  cursor: pointer;  
 }

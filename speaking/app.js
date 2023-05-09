@@ -9,7 +9,7 @@ let string = `Convert the following sentences into a json array of sentences. Ea
 `
 
 let morpher;
-let myFont;
+let primaryFont, pixelFont;
 let sentences = [
 
   {
@@ -83,15 +83,16 @@ function preload() {
   // decrease volume by 50%
   sound.setVolume(0.2);
 
-  // myFont = loadFont('./dist/paraaminobenzoic.ttf');
-  myFont = loadFont('./dist/Retroica.ttf');
-  // myFont = loadFont("./dist/Hyperspace.ttf");
+  // primaryFont = loadFont('./dist/paraaminobenzoic.ttf');
+  primaryFont = loadFont('./dist/Retroica.ttf');
+  pixelFont = loadFont('../shared/fonts/pixelplay.ttf');
+  // primaryFont = loadFont("./dist/Hyperspace.ttf");
 }
 
 
 let started = false;
 
-let defaultColor, targetColor;
+let defaultColor, targetColor, accentColor;
 
 function setup() {
   reverb = new p5.Reverb();
@@ -100,8 +101,9 @@ function setup() {
   sound.disconnect();
   
   reverb.process(sound, 3, 2);
-  defaultColor = color(242, 226, 208);
-  targetColor = color(0, 20, 80);
+  accentColor = color('#E3BCAB');
+  defaultColor = color('#F2D5C8');
+  targetColor = color('#532312');
   const canvas = createCanvas(900, 600);
   canvas.parent('content');
   morpher = new morphMaker();
@@ -142,22 +144,80 @@ function mouseMoved(){
 }
 
 function mousePressed(){
-  started  = true;
-  sound.loop();
+  // if mouse click was in canvas
+  if (mouseX > 0 && mouseX < width && mouseY > 0 && mouseY < height) {
+    started  = true;
+    sound.loop();
+  }
  
 }
 
+// function radialGradient(sX, sY, sR, eX, eY, eR, colorS, colorE){
+//   let gradient = drawingContext.createRadialGradient(
+//     sX, sY, sR, eX, eY, eR
+//   );
+//   gradient.addColorStop(0, colorS);
+//   gradient.addColorStop(1, colorE);
+//   // drawingContext.fillStyle = gradient;
+//   drawingContext.strokeStyle = gradient;
+// }
+
+
+
+// function hyperGradient1(){
+//   radialGradient(
+//     250, 250, 0,//Start pX, pY, start circle radius
+//     250, 250, 250,//End pX, pY, End circle radius
+//     color(190, 100, 100, 100), //Start color
+//     color(0, 100, 0, 0), //End color
+//   );
+//   ellipse(width/2, height/2, 400, 400);
+
+//   radialGradient(
+//     width-250, 250, 0,//Start pX, pY, start circle radius
+//     width-250, 250, 250,//End pX, pY, End circle radius
+//     color(250, 100, 100, 100), //Start color
+//     color(0, 100, 0, 0), //End color
+//   );
+//   ellipse(width/2, height/2, 400, 400);
+
+//   radialGradient(
+//     width-250, height-250, 0,//Start pX, pY, start circle radius
+//     width-250, height-250, 250,//End pX, pY, End circle radius
+//     color(280, 100, 100, 100), //Start color
+//     color(0, 100, 0, 0), //End color
+//   );
+//   ellipse(width/2, height/2, 400, 400);
+
+//   radialGradient(
+//     250, height-250, 0,//Start pX, pY, start circle radius
+//     250, height-250, 250,//End pX, pY, End circle radius
+//     color(40, 100, 100, 100), //Start color
+//     color(0, 100, 0, 0), //End color
+//   );
+//   ellipse(width/2, height/2, 400, 400);
+// }
+
 function draw() {  
   
+  
+  
+  //blendMode('darken');
+
   if (!started){
     background(defaultColor);
     fill(targetColor);
-    textFont(myFont);
-    textSize(32);
     const padding = 20;
     translate(padding, height/5);
     textAlign(CENTER, TOP);
-    text('This is my attempt to capture the frustration I can feel trying to understand tagalog. Some phrases are easier to find than others. Either way the struggle to understand can prevent me from fully grasping the story being told. Chronicled here are words from my lola.\r\n\r\nMove the cursor until you find the translation.\r\n\r\nClick to start', 0, 0, width - 2 * padding);
+    textFont(pixelFont);
+    textSize(40);
+    text('CAN YOU EVEN SPEAK?', 0, 0, width - 2 * padding);
+    textFont(pixelFont);
+    textSize(30);
+    translate(0, height/10);
+    
+    text('This is my attempt to capture the frustration I can feel trying to understand tagalog. Some phrases are easier to find than others. Either way the struggle to understand can prevent me from fully grasping the story being told. Chronicled here are words from my lola.\r\n\r\nMove the cursor until you find the translation.\r\n\r\nClick to start.', 0, 0, width - 2 * padding);
     //return;
   }else{    
     
@@ -166,6 +226,7 @@ function draw() {
     
     reverb.drywet(1);
   }
+  //hyperGradient1();
   
 }
 
@@ -195,16 +256,16 @@ function morphMaker() {
     const translationValue = this.word.translation.toUpperCase();
     this.word.translation = {
       value: this.word.translation,
-      points: myFont.textToPoints(translationValue, 0, 0, 100, options),
-      bounds: myFont.textBounds(translationValue, 0, 0, 100)
+      points: primaryFont.textToPoints(translationValue, 0, 0, 100, options),
+      bounds: primaryFont.textBounds(translationValue, 0, 0, 100)
     }
 
     const textValue = this.word.text.toUpperCase();
 
     this.word.text = {
       value: this.word.text,
-      points: myFont.textToPoints(textValue, 0, 0, 100, options),
-      bounds: myFont.textBounds(textValue, 0, 0, 100)
+      points: primaryFont.textToPoints(textValue, 0, 0, 100, options),
+      bounds: primaryFont.textBounds(textValue, 0, 0, 100)
     }
 
     this.word.translation.points.forEach((point, index) => {
@@ -323,7 +384,7 @@ function morphMaker() {
    
 
     textAlign(LEFT, TOP);
-    textFont(myFont);
+    textFont(primaryFont);
     textWrap(WORD);
     const textPadding = 30;
     sunRotation += lerp(0.008, 0.003, percentage);
@@ -331,7 +392,7 @@ function morphMaker() {
     translate(0, 20);
     for (let i = 0; i < this.allSentences.length; i++){
       
-      fill(lerpColor(color('yellow'), color('black'), distance/this.translationDistance));
+      fill(lerpColor(accentColor, targetColor, distance/this.translationDistance));
       const sunSize = 30;
       this.sun(15, 30 + (10 + sunSize) * i, height - sunSize -  20, 0);
     }
@@ -340,7 +401,7 @@ function morphMaker() {
       // cursor
 
       if (hasMouseMoved){
-        fill(lerpColor(color('yellow'), color('black'), distance/this.translationDistance));
+        fill(lerpColor(accentColor, targetColor, distance/this.translationDistance));
         this.sun(this.progressionDistance, mouseX, mouseY, sunRotation);
       }    
     
@@ -351,9 +412,9 @@ function morphMaker() {
       fill(this.bgColor);        
       if (this.state !== 'progressing'){
         this.sun(this.progressionDistance + 3, this.word.x, this.word.y, sunRotation)
-        fill(lerpColor(color('black'), color('white'), percentage));
+        fill(lerpColor(targetColor, color('white'), percentage));
       }else{
-        fill(lerpColor(color('black'), color('white'), this.stateTimer/this.stateDuration));
+        fill(lerpColor(targetColor, color('white'), this.stateTimer/this.stateDuration));
       }
       textSize(80);
       textLeading(70);
@@ -428,7 +489,7 @@ function morphMaker() {
       noStroke();          
 
       // text + translation
-      // const textColor = lerpColor(color('black'), color('white'), percentage);
+      // const textColor = lerpColor(targetColor, color('white'), percentage);
       // fill(textColor);
       
       this.easingTimer++;
