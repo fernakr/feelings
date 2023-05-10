@@ -1,5 +1,29 @@
 /* CSS reset */
 
+
+html, body{
+  height: 100%;  
+}
+
+@font-face{
+  font-family: 'Pixel12x10';
+  src: url('./shared/fonts/Pixel12x10.ttf');
+}
+
+body{
+  font-family: 'Pixel12x10', sans-serif;
+  display: flex;
+    flex-direction: column;
+    color: #fff;
+    background-color: #000;
+    align-items: center;    
+    justify-content: center;
+}
+
+canvas{
+  border: 3px double white;
+}
+
 body, h1 {
     margin: 0;
     padding: 0;
@@ -9,11 +33,10 @@ body, h1 {
     text-transform: uppercase;
   }
 
-  body {
-    color: #333;
+  a{
+    color: inherit;
   }
 
-  /* Common */
 
   .fix {
     *zoom: 1;

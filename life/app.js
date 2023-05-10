@@ -32,6 +32,7 @@ window.s1 =  function ($_p)  {
     let greenOffset = 0;
     let redOffset = 0;
     let moneyLow = false;
+    let primaryFont;
     const levels = [
       {
         blueOffset: 30, 
@@ -278,7 +279,7 @@ window.s1 =  function ($_p)  {
         $_p.textAlign($_p.CENTER);
         $_p.noStroke();
         $_p.fill($_p.color('navy'),100  - (this.life / this.lifeSpan) * 100);
-        $_p.rect($_p.width / 2 , $_p.height / 2  - this.y + 40, 130, 130);
+        $_p.rect($_p.width / 2 , $_p.height / 2  - this.y + 40, 180, 130);
         
         $_p.textSize(15);        
         $_p.fill(255, this.opacity);        
@@ -364,6 +365,10 @@ window.s1 =  function ($_p)  {
     }
 
     const itemMax = 20;
+
+    $_p.preload = function () {
+      primaryFont = $_p.loadFont('./Pixel12x10.ttf');
+    }
     
     $_p.setup = function () {
       const canvas = $_p.createCanvas(1000, 600);
@@ -459,6 +464,7 @@ window.s1 =  function ($_p)  {
 
         dead = true;
         $_p.textAlign($_p.CENTER);
+
         $_p.text('GAME OVER', $_p.width / 2, $_p.height / 2);
         $_p.text('You lasted for ' + (duration/24).toFixed(1) + ' days', $_p.width / 2, $_p.height / 2 + 30);
         $_p.textSize(15);
@@ -469,7 +475,8 @@ window.s1 =  function ($_p)  {
       
       for (let i = 0; i < Object.values(stats).length; i++){
         const value = Math.round(Object.values(stats)[i]);
-        $_p.fill(value > 25 ? 'white' : 'red');
+        $_p.fill(value > 25 ? 'white' : 'yellow');        
+        $_p.textFont(primaryFont);
         $_p.text(Object.keys(stats)[i] + ': ' + value, 10,  $_p.height - 10 -  i * 30);        
         $_p.textAlign($_p.LEFT);
       }      
