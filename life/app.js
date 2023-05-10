@@ -282,8 +282,8 @@ window.s1 =  function ($_p)  {
         }
         $_p.textAlign($_p.CENTER);
         $_p.noStroke();
-        $_p.fill($_p.color('navy'),100  - (this.life / this.lifeSpan) * 100);
-        $_p.rect($_p.width / 2 , $_p.height / 2  - this.y + 40, 180, 130);
+        $_p.fill($_p.color('#050084'),100  - (this.life / this.lifeSpan) * 100);
+        $_p.rect($_p.width / 2 , $_p.height / 2  - this.y + 40, 180, 125);
         
         $_p.textSize(15);        
         $_p.fill(255, this.opacity);        
@@ -509,6 +509,7 @@ window.s1 =  function ($_p)  {
         items[i].fall();
         items[i].display(i)
       }
+      
       if (start) {
         
         $_p.background(12, 12, currBlue + blueOffset, 150);
@@ -516,17 +517,17 @@ window.s1 =  function ($_p)  {
         $_p.rectMode($_p.CENTER);
         $_p.strokeWeight(4);
 
-        $_p.blendMode($_p.DIFFERENCE);
+        $_p.blendMode($_p.HARD_LIGHT);
         $_p.translate(0, 40);
         $_p.textFont(secondaryFont);
         $_p.textSize(40);
-        $_p.fill('#fff');        
+        $_p.fill('#FFD95C');        
         
         
         $_p.stroke('#F33837');        
         $_p.textLeading(60);
         $_p.text('THE\nSTRUGGLE\nIS REAL', $_p.width / 2, $_p.height / 2 - 200);
-        $_p.blendMode($_p.NORMAL);
+        $_p.blendMode($_p.BLEND);
         $_p.textFont(primaryFont);
         $_p.strokeWeight(1);
         $_p.translate(0, 80);
@@ -565,10 +566,14 @@ window.s1 =  function ($_p)  {
         $_p.text('Duration: ' + (duration/ 24).toFixed(1) + ' days', 10, 30);
         if (!dead) duration += durationIncrement;
       }      
+      
+
+      $_p.push();
+
       $_p.fill(255);
       $_p.strokeWeight(2);
       $_p.stroke(255);
-      $_p.push();
+      
       $_p.translate($_p.width / 2, $_p.height);
       $_p.rotate($_p.radians(fireRotation));
       $_p.line(0, 0, 0, -20);

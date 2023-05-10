@@ -1,6 +1,15 @@
 /* CSS reset */
 
 
+:root{
+  --primary-color-darker: #050084;
+  --primary-color-dark: #0A0D9D;
+  --primary-color: #0030cd;
+  --secondary-color: #F33837;
+  --tertiary-color: #FFD95C;
+  --accent-color: #F69021;
+}
+
 html, body{
   height: 100%;  
 }
