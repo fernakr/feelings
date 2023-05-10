@@ -32,7 +32,8 @@ window.s1 =  function ($_p)  {
     let greenOffset = 0;
     let redOffset = 0;
     let moneyLow = false;
-    let primaryFont;
+    let primaryFont, secondaryFont;
+
     const levels = [
       {
         blueOffset: 30, 
@@ -40,7 +41,7 @@ window.s1 =  function ($_p)  {
         itemTypes: [
           {
             name: 'Car Accident',
-            color: 'red',
+            color: '#F33837',
             probability: 5,
             values: {
               happiness: -10,
@@ -51,7 +52,7 @@ window.s1 =  function ($_p)  {
           },
           {
             name: 'Health Issue',
-            color: 'red',
+            color: '#F33837',
             probability: 5,
             values: {
               happiness: -10,
@@ -62,7 +63,7 @@ window.s1 =  function ($_p)  {
           },
           {
             name: 'Breakup',
-            color: 'red',
+            color: '#F33837',
             probability: 5,
             values: {
               happiness: -10,
@@ -83,7 +84,8 @@ window.s1 =  function ($_p)  {
     let happinessTimer = 0;
     
     var bullets = [];
-    var currBlue = 96;
+    const defaultBlue = 96;
+    var currBlue = defaultBlue;
     
     
     var fireRotation = 0;
@@ -108,7 +110,7 @@ window.s1 =  function ($_p)  {
         this.path += 5;
         this.y = initY - this.path * $_p.sin($_p.radians(90 - fireRotation));
         this.x = initX + this.path * $_p.cos($_p.radians(fireRotation - 90));
-        $_p.stroke(255, 0, 0);
+        $_p.stroke('#F33837');
         $_p.strokeWeight(2);
         $_p.fill(255);
         $_p.ellipse(this.x, this.y, 20, 20);
@@ -133,7 +135,8 @@ window.s1 =  function ($_p)  {
       },
       {
         name: 'Work',
-        color: 'blue',
+        color: '#FFD95C',
+        style: 'dark',
         probability: 20,
         values: {
           happiness: -1,          
@@ -144,7 +147,7 @@ window.s1 =  function ($_p)  {
       },
       {
         name: 'Cook',
-        color: 'yellow',
+        color: '#FFD95C',
         probability: 3,
         values: {
           happiness: 1,          
@@ -199,7 +202,7 @@ window.s1 =  function ($_p)  {
       },      
       {
         name: 'Doomscroll',
-        color: 'red',        
+        color: '#F33837',        
         probability: 40,      
         values: {  
           happiness: -5,
@@ -210,7 +213,7 @@ window.s1 =  function ($_p)  {
       },
       {
         name: 'Booze',
-        color: 'red',
+        color: '#F33837',
         probability: 5,
         values: {
           happiness: 1,
@@ -268,6 +271,7 @@ window.s1 =  function ($_p)  {
       this.opacity = 255;
       this.color = item.color;
       this.values = item.values;
+      //this.style = item.style;
 
       this.display = function (itemIndex) {
         this.opacity = 255 - (this.life / this.lifeSpan) * 255;
@@ -302,7 +306,8 @@ window.s1 =  function ($_p)  {
       }).item;
       this.values = item.values;
       this.name = item.name;
-      this.color = item.color;                  
+      this.color = item.color;       
+      this.style = item.style;           
       this.weight = 2;
       
       this.x = $_p.random(-$_p.width / 2, $_p.width);
@@ -322,7 +327,7 @@ window.s1 =  function ($_p)  {
         }
         for (var j = 0; j < bullets.length; j++) {
           if ($_p.abs($_p.dist(bullets[j].x, bullets[j].y, this.x, this.y)) < 20) {
-            this.color = 'yellow';
+            this.color = '#FFD95C';
             this.deathCount = 0;
 
             currItems.push(new CurrItem(this));
@@ -349,6 +354,7 @@ window.s1 =  function ($_p)  {
         $_p.stroke(this.color);
         $_p.textSize(25);
         $_p.textAlign($_p.LEFT);
+
         $_p.text(this.name, this.x, this.y - 10);
         $_p.strokeWeight(this.weight);
         $_p.push();
@@ -368,6 +374,7 @@ window.s1 =  function ($_p)  {
 
     $_p.preload = function () {
       primaryFont = $_p.loadFont('./Pixel12x10.ttf');
+      secondaryFont = $_p.loadFont('./Pixelmania.ttf');
     }
     
     $_p.setup = function () {
@@ -459,7 +466,7 @@ window.s1 =  function ($_p)  {
       }
       $_p.background(12 + redOffset, 12 + greenOffset, currBlue + blueOffset, 90);
       $_p.fill(255);
-      $_p.stroke(255, 0, 0);
+      $_p.stroke('#F33837');
       if (stats.energy <= 0) {
 
         dead = true;
@@ -475,7 +482,7 @@ window.s1 =  function ($_p)  {
       
       for (let i = 0; i < Object.values(stats).length; i++){
         const value = Math.round(Object.values(stats)[i]);
-        $_p.fill(value > 25 ? 'white' : 'yellow');        
+        $_p.fill(value > 25 ? 'white' : '#FFD95C');        
         $_p.textFont(primaryFont);
         $_p.text(Object.keys(stats)[i] + ': ' + value, 10,  $_p.height - 10 -  i * 30);        
         $_p.textAlign($_p.LEFT);
@@ -507,11 +514,26 @@ window.s1 =  function ($_p)  {
         $_p.background(12, 12, currBlue + blueOffset, 150);
         $_p.textAlign($_p.CENTER);
         $_p.rectMode($_p.CENTER);
+        $_p.strokeWeight(4);
+
+        $_p.blendMode($_p.DIFFERENCE);
+        $_p.translate(0, 40);
+        $_p.textFont(secondaryFont);
+        $_p.textSize(40);
+        $_p.fill('#fff');        
+        
+        
+        $_p.stroke('#F33837');        
+        $_p.textLeading(60);
+        $_p.text('THE\nSTRUGGLE\nIS REAL', $_p.width / 2, $_p.height / 2 - 200);
+        $_p.blendMode($_p.NORMAL);
+        $_p.textFont(primaryFont);
         $_p.strokeWeight(1);
-        $_p.keyStroke = $_p.color(255, 0, 0);
+        $_p.translate(0, 80);
+        $_p.keyStroke = $_p.color('#F33837');
         $_p.keyFill = $_p.color(255);
         $_p.keyStrokePressed = $_p.color(255);
-        $_p.keyFillPressed = $_p.color(255, 0, 0);
+        $_p.keyFillPressed = $_p.color('#F33837');
         let spaceStroke = $_p.keyStroke;
         let spaceFill = $_p.keyFill;
         if ($_p.keyIsPressed && $_p.keyCode == 32) {
@@ -535,7 +557,7 @@ window.s1 =  function ($_p)  {
         $_p.push();
         $_p.noStroke();        
       
-        $_p.text('ENTER TO start', $_p.width / 2, $_p.height / 2 + 75)
+        $_p.text('ENTER TO START', $_p.width / 2, $_p.height / 2 + 75)
       }else{
         $_p.textSize(15);
         $_p.noStroke();
@@ -587,7 +609,7 @@ window.s1 =  function ($_p)  {
     
     
     $_p.keyReleased = function () {
-      currBlue = 96
+      currBlue = defaultBlue
       if (!$_p.keyIsPressed){
         keyPressed = false
       }      
