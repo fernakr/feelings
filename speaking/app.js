@@ -9,7 +9,7 @@ let string = `Convert the following sentences into a json array of sentences. Ea
 `
 
 let morpher;
-let primaryFont, pixelFont;
+let primaryFont, pixelFont, headingFont;
 let sentences = [
 
   {
@@ -86,6 +86,7 @@ function preload() {
   // primaryFont = loadFont('./dist/paraaminobenzoic.ttf');
   primaryFont = loadFont('./dist/Retroica.ttf');
   pixelFont = loadFont('../shared/fonts/pixelplay.ttf');
+  headingFont = loadFont('./fonts/AURORA-PRO.otf');
   // primaryFont = loadFont("./dist/Hyperspace.ttf");
 }
 
@@ -208,16 +209,18 @@ function draw() {
     background(defaultColor);
     fill(targetColor);
     const padding = 20;
-    translate(padding, height/5);
+    translate(padding, 50);
     textAlign(CENTER, TOP);
-    textFont(pixelFont);
-    textSize(40);
+    textFont(headingFont);
+    textSize(60);
     text('CAN YOU EVEN SPEAK?', 0, 0, width - 2 * padding);
     textFont(pixelFont);
+    textSize(22);
+    translate(0, 100);    
+    text('This is my attempt to capture the frustration I can feel trying to understand tagalog. \r\nSome phrases are easier to find than others. \r\nEither way the struggle to understand can prevent me from fully grasping the story being told. Chronicled here are words from my lola.', 0, 0, width - 2 * padding);
+    translate(0, 140);    
     textSize(30);
-    translate(0, height/10);
-    
-    text('This is my attempt to capture the frustration I can feel trying to understand tagalog. Some phrases are easier to find than others. Either way the struggle to understand can prevent me from fully grasping the story being told. Chronicled here are words from my lola.\r\n\r\nMove the cursor until you find the translation.\r\n\r\nClick to start.', 0, 0, width - 2 * padding);
+    text('Move the cursor until you find the translation.\r\nClick to start.', 0, 0, width - 2 * padding);
     //return;
   }else{    
     
