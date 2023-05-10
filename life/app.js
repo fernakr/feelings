@@ -135,7 +135,7 @@ window.s1 =  function ($_p)  {
       },
       {
         name: 'Work',
-        color: '#FFD95C',
+        color: 'blue',
         style: 'dark',
         probability: 20,
         values: {
