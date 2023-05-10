@@ -414,7 +414,7 @@ window.s1 =  function ($_p)  {
       }
 
 
-      if (!dead){
+      if (!dead && !start){
 
         
         inactionTimer ++;
