@@ -210,17 +210,19 @@ function draw() {
     fill(targetColor);
     const padding = 20;
     translate(padding, 50);
-    textAlign(CENTER, TOP);
+    textAlign(CENTER, CENTER);
     textFont(headingFont);
     textSize(60);
     text('CAN YOU EVEN SPEAK?', 0, 0, width - 2 * padding);
     textFont(pixelFont);
     textSize(22);
     translate(0, 100);    
-    text('This is my attempt to capture the frustration I can feel trying to understand tagalog. \r\nSome phrases are easier to find than others. \r\nEither way the struggle to understand can prevent me from fully grasping the story being told. Chronicled here are words from my lola.', 0, 0, width - 2 * padding);
-    translate(0, 140);    
+    textLeading(30);
+    text('This is my attempt to capture the frustration I can feel trying to understand tagalog. \r\nSome phrases are easier to find than others. \r\n...\r\nThe struggle to understand can prevent me from fully grasping the story being told. \r\nChronicled here are words from my lola.', 0, 0, width - 2 * padding);
+    translate(0, 180);    
     textSize(30);
-    text('Move the cursor until you find the translation.\r\nClick to start.', 0, 0, width - 2 * padding);
+    textLeading(45);
+    text('Move the cursor until you find the translation\r\nCLICK TO START', 0, 0, width - 2 * padding);
     //return;
   }else{    
     
