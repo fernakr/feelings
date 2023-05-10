@@ -209,7 +209,7 @@ function draw() {
     background(defaultColor);
     fill(targetColor);
     const padding = 20;
-    translate(padding, 50);
+    translate(padding, height/4);
     textAlign(CENTER, CENTER);
     textFont(headingFont);
     textSize(60);
