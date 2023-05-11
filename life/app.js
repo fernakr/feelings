@@ -611,6 +611,17 @@ window.s1 =  function ($_p)  {
       }
     }
 
+    function reset(){
+      duration = 0;
+      dead = false;
+      stats = Object.assign({}, startValues);
+      inactionTimer = 0;
+      happinessTimer = 0;
+      greenOffset = 0;
+      blueOffset = 0;
+      redOffset = 0;
+    }
+
     
     
     $_p.keyReleased = function () {
@@ -624,15 +635,8 @@ window.s1 =  function ($_p)  {
     $_p.keyPressed = function () {
       
       if ($_p.keyCode === $_p.ENTER) {
-        if (stats.energy == 0) {
-          duration = 0;
-          dead = false;
-          stats = Object.assign({}, startValues);
-          inactionTimer = 0;
-          happinessTimer = 0;
-          greenOffset = 0;
-          blueOffset = 0;
-          redOffset = 0;
+        if (dead) {
+          reset();
         }
         start = false
       } else if ($_p.keyCode === 32 && stats.energy > 0) {
