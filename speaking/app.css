@@ -23,6 +23,10 @@ html, body{
   color: var(--secondary-color-darker);
 }
 
+canvas{
+  cursor: none !important;
+}
+
 a{
   color: inherit;
 }

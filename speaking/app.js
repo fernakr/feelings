@@ -119,11 +119,26 @@ function setup() {
       word.y = random(padding, height - padding);
     })
   })
-  const button = document.querySelector('button');
-  button.addEventListener('click', function(e){
-    
-    let buttonText;
-    soundOn = !soundOn;
+  const soundButton = document.querySelector('button');
+
+  // listen for message from parent window
+  window.addEventListener('message', function(e) {
+    //console.log(e.data);
+    if (e.data === 'close'){
+      soundOn = false;
+      soundUpdate(soundOn);
+    }     
+  });
+
+
+  // window.addEventListener('close', function(e) {
+  //   soundOn = false;
+  //   soundUpdate(soundOn);
+
+  // });
+  const soundUpdate = (soundOn) =>{
+
+    let buttonText;    
     if (soundOn) {
       sound.play();                        
 
@@ -132,7 +147,14 @@ function setup() {
       sound.stop();
       buttonText = 'Sound On';
     }
-    e.target.innerHTML = buttonText;
+    soundButton.innerHTML = buttonText;
+
+  }
+  soundButton.addEventListener('click', function(e){
+
+    soundOn = !soundOn;
+    
+    soundUpdate(soundOn);
 
   }
   );

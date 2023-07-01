@@ -17,7 +17,7 @@ class Bingo{
   generateBoard(){
     this.board = [];
     this.options = this.shuffle(this.options);
-    console.log(this.options);
+    //console.log(this.options);
     let optionIndex = 0;
     for(let i = 0; i < this.size; i++){
       this.board.push([]);
