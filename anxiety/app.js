@@ -315,7 +315,7 @@ if (typeof Object.merge != 'function') {
                     y = cvEl.height / 2;
 
                 var ctx = cvEl.getContext('2d');
-                ctx.font = '400 22px Futura, sans serif';
+                ctx.font = '400 20px Futura, sans serif';
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
                 ctx.fillStyle = '#333'; // Text color
@@ -469,21 +469,25 @@ if (typeof Object.merge != 'function') {
             message = 'Maybe tomorrow will be better';
         }
         //Create overlay.
-        var overlay = document.createElement("div");
-        overlay.setAttribute("id", "ws-game-over-outer");
-        overlay.setAttribute("class", "ws-game-over-outer");
-        this.wrapEl.parentNode.appendChild(overlay);
+        // var overlay = document.createElement("div");
+        // overlay.setAttribute("id", "ws-game-over-outer");
+        // overlay.setAttribute("class", "ws-game-over-outer");
+        // this.wrapEl.parentNode.appendChild(overlay);
 
         //Create overlay content.
-        var overlay = document.getElementById("ws-game-over-outer");
-        overlay.classList.add('is-' + statusClass);
-        overlay.innerHTML = "<div class='ws-game-over-inner' id='ws-game-over-inner'>" +
-            "<div class='ws-game-over' id='ws-game-over'>" +
+        window.anxietyInstance.overlay.classList.add('is-' + statusClass);
+        window.anxietyInstance.overlay.classList.remove('is-inactive');
+        window.anxietyInstance.overlay.innerHTML = 
             "<h2>" + heading + "</h2>" +
             "<p>" + message + "</p>" +
-            "<button onClick='window.location.reload()'>Play Again</button>" +
-            "</div>" +
-            "</div>";
+            "<button id='restart'>Play Again</button>";
+        //Add event listener to restart button.
+        document.getElementById('restart').addEventListener('click', function(){            
+            
+            window.anxietyInstance.reset();
+            window.anxietyInstance.overlay.classList.add('is-inactive');
+            window.anxietyInstance.started = true;
+        });
     }
 
     /**
@@ -753,25 +757,13 @@ function searchLanguage(firstLetter) {
     if ((codefirstLetter >= 12354) && (codefirstLetter <= 12436)) { //Japan Hiragana
         return codeLetter = [12388, 12418]; //Only no small letter
     }
-    console.log("Letter not detected : " + firstLetter + ":" + codefirstLetter);
+    //console.log("Letter not detected : " + firstLetter + ":" + codefirstLetter);
     return codeLetter;
 
 
 }
-var gameAreaEl = document.getElementById('ws-area');
-var gameobj = gameAreaEl.wordSearch();
 
-// Put words into `.ws-words`
-var words = gameobj.settings.wordsList,
-    wordsWrap = document.querySelector('.ws-words');
-for (i in words) {
-    var liEl = document.createElement('li');
-    liEl.setAttribute('class', 'ws-word');
-    liEl.innerText = words[i];
-    wordsWrap.appendChild(liEl);
-}
-
-
+let gameInstance;
 class Anxiety {
     constructor() {
         this.anxiety = 0;
@@ -779,30 +771,70 @@ class Anxiety {
         this.animate = this.animate.bind(this);
         this.anxietyBar = document.getElementById("anxiety");
         this.distractedClass = 'is-distracted';
+        this.started = false;
     }
 
-    animate() {
+    animate() {        
+        console.log('test');
+        if (!this.started) return;
         if (this.timeout > 0) {
-            this.timeout -= 1;
-           //console.log(this.timeout);
+            this.timeout -= 1;           
             this.anxietyBar.classList.add(this.distractedClass);
         }
 
-        if (this.anxiety >= 100){
-            //alert('Game Over');
-            gameobj.gameOver(true);
+        if (this.anxiety >= 100){            
+            gameInstance.gameOver(true);
         }else{
             requestAnimationFrame(this.animate);
             if (this.anxiety <= 100 && this.timeout <= 0) {
                 this.anxietyBar.classList.remove(this.distractedClass);
+//                this.anxiety = this.anxiety + 5;
                 this.anxiety = this.anxiety + .035;
                 this.anxietyBar.style.height = this.anxiety + "%";
             }
         }
 
     }
+    reset(){
+        this.anxiety = 0;
+        this.timeout = 0;
+        this.anxietyBar.style.height = this.anxiety + "%";
+        this.anxietyBar.classList.remove(this.distractedClass);
+        this.setupWordSearch();  
+        requestAnimationFrame(this.animate);      
+
+    }
+    setupWordSearch(){
+        var gameAreaEl = document.getElementById('ws-area');
+        gameAreaEl.innerHTML = '';
+        gameInstance = gameAreaEl.wordSearch();
+
+
+
+    }
+    setupStart(){
+        this.overlay.innerHTML = 
+        "<button id='ws-start'>Start</button>";
+        var startButton = document.getElementById("ws-start");
+        startButton.addEventListener("click", () => {            
+            this.overlay.classList.add('is-inactive');
+            this.started = true;
+            requestAnimationFrame(this.animate);         
+        });
+                // Put words into `.ws-words`
+        var words = gameInstance.settings.wordsList,
+            wordsWrap = document.querySelector('.ws-words');
+        for (let i = 0; i < words.length; i++) {
+            var liEl = document.createElement('li');
+            liEl.setAttribute('class', 'ws-word');
+            liEl.innerText = words[i];
+            wordsWrap.appendChild(liEl);
+        }
+    }
     init() {
-        requestAnimationFrame(this.animate);
+        this.overlay = document.getElementById("ws-overlay");                        
+        this.setupWordSearch();        
+        this.setupStart();
     }
 
 }
