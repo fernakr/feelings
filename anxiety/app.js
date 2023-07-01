@@ -818,6 +818,7 @@ class Anxiety {
         var startButton = document.getElementById("ws-start");
         startButton.addEventListener("click", () => {            
             this.overlay.classList.add('is-inactive');
+            this.setupWordSearch();
             this.started = true;
             requestAnimationFrame(this.animate);         
         });
