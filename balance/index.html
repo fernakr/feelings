@@ -1,230 +1,170 @@
-<html> 
-    <head>
-        <style>
-            body{
-                display: flex;
-                flex-direction: column;
-                height: 100vh;
-                margin: 0;
-            }
-            .player{
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                height: 100px;
-                width: 100%;
-                background-color: #f0f0f0;
-                border: 1px solid #000;
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body{
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+        }
+        .player{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100px;
+            width: 100%;
+            background-color: #f0f0f0;
+            border: 1px solid #000;
+        }
+        .card{
+            cursor: pointer;
+            display: flex;                
+            justify-content: center;
+            align-items: center;
+            height: 50px;
+            width: 50px;
+            background-color: #fff;
+            border: 1px solid #000;
+            margin: 5px;
+        }
+        .play-area{
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100px;
+            width: 100%;
+            background-color: green;
+            border: 1px solid #000;
+        }
+        .info{
+            position: fixed;
+            top: 50%;
+            right: 0;
+            transform: rotate(270deg);
+            color: yellow;
+            font-size: 40px;
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+            text-transform: uppercase;
+        }
+    </style>
 
-            }
-            .card{
-                cursor: pointer;
-                display: flex;                
-                justify-content: center;
-                align-items: center;
-                height: 50px;
-                width: 50px;
-                background-color: #fff;
-                border: 1px solid #000;
-                margin: 5px;
-            }
-                /* .card.is-flipped{                    
-                    
+<script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+<script>
+    function game() {        
+        return {
+            dealer: {
+                cards: [],
+                cardOptions: [
+                    { title: 'Accident', life: 3, probability: 1 },
+                    { title: 'Nothing', life: 1, probability: 8 }
+                ],
+                probability: {}
+            },
+            player: {
+                cards: [],
+                cardOptions: [
+                    { title: 'Player card', life: 3, probability: 1 }
+                ],
+                probability: {}
+            },
+            playArea: {
+                cards: []
+            },
+            turn: false,
 
+            setup() {
+                this.createProbabilityRanges(this.dealer);
+                this.createProbabilityRanges(this.player);
+                this.createDealerDeck();
+                this.createPlayerDeck();
+            },
 
-                } */
-
-            .play-area{
-                flex: 1;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                height: 100px;
-                width: 100%;
-                background-color: green;
-                border: 1px solid #000;
-            }
-            .info{
-                position: fixed;
-                top: 50%;
-                right: 0;
-                transform: rotate(270deg);
-                color: yellow;
-                font-size: 40px;
-                font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-                text-transform: uppercase;
-
-            }
-        </style>
-    </head>
-    <body>
-        <div id="info-area" class="info"></div>
-        <div id="dealer" class="player"></div>
-        <div id="play-area" class="play-area"></div>
-        <div id="player" class="player"></div>
-        <script>
-            class Game {
-                constructor(){
-                    this.dealer = {
-                        elem: document.getElementById('dealer'),
-                        cards: [],
-                        cardOptions: [
-                            {
-                                title: 'Accident',
-                                life: 3,
-                                probability: 1
-                            },
-                            {
-                                title: 'Nothing',
-                                life: 1,
-                                probability: 8
-                            }
-                        ]
-                    };
-                    this.player = {
-                        elem: document.getElementById('player'),
-                        cards: [],
-                        cardOptions: [
-                        {
-                            title: 'Player card',
-                            life: 3,
-                            probability: 1
-                        }
-                    ]
-                    };                
-                    
-                    this.playArea = {
-                        elem: document.getElementById('play-area'),
-                        cards: []
-                    };
-                    this.createProbabilityRanges(this.dealer);
-                    this.createProbabilityRanges(this.player);
-                    //console.log(this.dealer.probability);
-                    
-                    this.turn = false;                    
-                    this.infoArea = document.getElementById('info-area');
+            createProbabilityRanges(object) {
+                object.probability = { range: [] };
+                let currProb = 0;
+                for (let i = 0; i < object.cardOptions.length; i++) {
+                    const card = object.cardOptions[i];
+                    object.probability.range.push({ min: currProb, card: card });
+                    currProb += card.probability;
                 }
-                createProbabilityRanges(object){
-                    object.probability = {
-                        range: []
-                    };
-                    let currProb = 0;
-                    for (let i = 0; i < object.cardOptions.length; i++){
-                        const card = object.cardOptions[i];                        
-                        object.probability.range.push({                            
-                            min: currProb,
-                            card: card
-                        });                        
-                        currProb += card.probability;
+                object.probability.max = currProb;
+            },
+
+            drawCard(object) {
+                const prob = Math.floor(Math.random() * object.probability.max);
+                return object.probability.range.find(range => prob >= range.min && prob < range.min + range.card.probability).card;
+            },
+
+            createDealerDeck() {
+                for (let i = 0; i < 7; i++) {
+                    this.dealer.cards.push(this.drawCard(this.dealer));
+                }
+            },
+
+            createPlayerDeck() {
+                for (let i = 0; i < 7; i++) {
+                    this.player.cards.push(this.drawCard(this.player));
+                }
+            },
+
+            handleCardClick(index) {
+                if (this.turn) return;
+
+                const selectedCard = this.player.cards.splice(index, 1)[0];
+                this.playArea.cards.push(Object.assign({}, selectedCard));
+                this.turn = true;
+                this.lifeCheck();
+                this.drawNewCard(this.player);
+
+                setTimeout(() => {
+                    this.dealerPlay();
+                }, 1000);
+            },
+
+            dealerPlay() {
+                const selectedCard = this.dealer.cards.shift();
+                this.playArea.cards.push(Object.assign({}, selectedCard));
+                this.turn = false;
+                this.drawNewCard(this.dealer);
+            },
+
+            drawNewCard(object) {
+                setTimeout(() => {
+                    object.cards.push(this.drawCard(object));
+                }, 1000);
+            },
+
+            lifeCheck() {
+                this.playArea.cards.forEach(card => {
+                    card.life--;
+                    if (card.life <= 0) {
+                        this.playArea.cards.splice(this.playArea.cards.indexOf(card), 1);
                     }
-                    object.probability.max = currProb;
-                }
-                setup(){
-                    this.createDealerDeck();
-                    this.createPlayerDeck();
-                    this.render();
-
-                }
-                drawDealerCard(){
-                    // draw card based off probability
-                    const prob = Math.floor(Math.random() * this.dealer.probability.max);
-                    const selectedCard = this.dealer.probability.range.find(range => prob >= range.min && prob < range.min + range.card.probability).card;
-                    this.dealer.cards.push(selectedCard);
-                    
-                }
-                drawPlayerCard(){
-                    // draw card based off probability 
-                    const prob = Math.floor(Math.random() * this.player.probability.max);
-                    const selectedCard = this.player.probability.range.find(range => prob >= range.min && prob < range.min + range.card.probability).card;
-                    this.player.cards.push(selectedCard);
-                }
-                render(){
-
-                    
-                    this.infoArea.innerHTML = this.turn ? 'Dealer turn' : 'Player turn';
-                    this.dealer.elem.innerHTML = this.dealer.cards.map(card => `<div class="card is-flipped"></div>`).join('');
-                    this.player.elem.innerHTML = this.player.cards.map(card => `<div class="card">${card.title}<br />${card.life}</div>`).join('');
-                    this.playArea.elem.innerHTML = this.playArea.cards.map(card => `<div class="card">${card.title}<br />${card.life}</div>`).join('');
-
-                    // bind click event to player cards
-                    this.player.elem.querySelectorAll('.card').forEach((card, index) => {
-                        card.addEventListener('click', () => {
-                            
-                            if (this.turn){
-                                // player has already played this turn
-                                return;
-                            }
-                            this.turn = true;
-                            // player has clicked a card
-                            // remove the card from the player's deck
-                            const selectedCard = this.player.cards.splice(index, 1)[0];
-                            // add the card to the dealer's deck
-                            // create an instance from selectedCard
-                            const cardInstance = Object.assign({}, selectedCard);
-                            this.playArea.cards.push(cardInstance);
-                            this.render();
-                            this.lifeCheck();
-                            setTimeout(() => {
-                                this.drawPlayerCard();
-                                this.render();
-                                // dealer plays                                                        
-                                setTimeout(() => {
-                                    this.dealerPlay();
-                                }, 1000);
-                            }, 1000);                            
-                        });
-                    });
-                    
-
-                }
-                lifeCheck(){
-                    this.playArea.cards.forEach(card => {
-                        card.life--;
-                        if (card.life <= 0){
-                            // remove the card from the play area
-                            this.playArea.cards.splice(this.playArea.cards.indexOf(card), 1);
-                        }
-                    });
-                }
-                dealerPlay(){
-                    // dealer plays a card
-                    const selectedCard = this.dealer.cards.splice(0, 1)[0];
-                    // add the card to the play area
-                    const cardInstance = Object.assign({}, selectedCard);
-                    this.playArea.cards.push(cardInstance);
-                    // player plays
-                    this.turn = false;
-                    
-                    this.render();
-                    setTimeout(() => {
-                        this.drawDealerCard();
-                        this.render();
-                    }, 1000);                    
-                }
-                createPlayerDeck(){
-                    // life 
-                    // #: card is removed from play after # of rounds
-                    // -1: card is not kept in play (unless dealer event removes)                    
-                    
-                    
-                    // create a deck of cards for the player, set of 7, randomly 
-                    // selected from the cardOptions array
-                    for (let i = 0; i < 7; i++){
-                        this.drawPlayerCard();
-                    }
-                }
-                createDealerDeck(){
-                    
-                    // create a deck of cards for the dealer, set of 7, randomly
-                    // selected from the cardOptions array
-                    for (let i = 0; i < 7; i++){
-                        this.drawDealerCard();
-                    }
-                }
+                });
             }
+        };
+    }
+</script>
+</head>
+<body x-data="game()" x-init="setup()">
+    <div class="info" x-text="turn ? 'Dealer turn' : 'Player turn'"></div>
+    <div class="player" id="dealer">
+        <template x-for="card in dealer.cards">
+            <div class="card is-flipped"></div>
+        </template>
+    </div>
+    <div class="play-area">
+        <template x-for="card in playArea.cards">
+            <div class="card" x-text="card.title + ' ' + card.life"></div>
+        </template>
+    </div>
+    <div class="player" id="player">
+        <template x-for="(card, index) in player.cards">
+            <div class="card" x-text="card.title + ' ' + card.life" @click="handleCardClick(index)"></div>
+        </template>
+    </div>
 
-            new Game().setup();
-
-        </script>
-    </body>
+</body>
 </html>
