@@ -18,6 +18,7 @@
 
             }
             .card{
+                cursor: pointer;
                 display: flex;                
                 justify-content: center;
                 align-items: center;
@@ -75,7 +76,7 @@
                             },
                             {
                                 title: 'Nothing',
-                                life: 0,
+                                life: 1,
                                 probability: 8
                             }
                         ]
@@ -122,6 +123,7 @@
                     this.createDealerDeck();
                     this.createPlayerDeck();
                     this.render();
+
                 }
                 drawDealerCard(){
                     // draw card based off probability
@@ -144,7 +146,6 @@
                     this.player.elem.innerHTML = this.player.cards.map(card => `<div class="card">${card.title}<br />${card.life}</div>`).join('');
                     this.playArea.elem.innerHTML = this.playArea.cards.map(card => `<div class="card">${card.title}<br />${card.life}</div>`).join('');
 
-
                     // bind click event to player cards
                     this.player.elem.querySelectorAll('.card').forEach((card, index) => {
                         card.addEventListener('click', () => {
@@ -161,23 +162,29 @@
                             // create an instance from selectedCard
                             const cardInstance = Object.assign({}, selectedCard);
                             this.playArea.cards.push(cardInstance);
-                            this.drawPlayerCard();
                             this.render();
-                            // dealer plays                                                        
+                            this.lifeCheck();
                             setTimeout(() => {
-                                this.dealerPlay();
-                            }, 1000);
+                                this.drawPlayerCard();
+                                this.render();
+                                // dealer plays                                                        
+                                setTimeout(() => {
+                                    this.dealerPlay();
+                                }, 1000);
+                            }, 1000);                            
                         });
                     });
-                    if (!this.turn){
-                        this.playArea.cards.forEach(card => {
+                    
+
+                }
+                lifeCheck(){
+                    this.playArea.cards.forEach(card => {
                         card.life--;
-                        if (card.life === 0){
+                        if (card.life <= 0){
                             // remove the card from the play area
                             this.playArea.cards.splice(this.playArea.cards.indexOf(card), 1);
                         }
                     });
-                    }                    
                 }
                 dealerPlay(){
                     // dealer plays a card
@@ -187,9 +194,12 @@
                     this.playArea.cards.push(cardInstance);
                     // player plays
                     this.turn = false;
-
-                    this.drawDealerCard();
+                    
                     this.render();
+                    setTimeout(() => {
+                        this.drawDealerCard();
+                        this.render();
+                    }, 1000);                    
                 }
                 createPlayerDeck(){
                     // life 
