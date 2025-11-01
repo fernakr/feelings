@@ -1,16 +1,16 @@
-.blogroll{
-    position: fixed;    
+.blogroll {
+    position: fixed;
     z-index: 2;
     top: 0;
     left: 0;
     padding: 10px;
-    
+    opacity: 0;
 }
 
-.blogroll:before{
+.blogroll:before {
     /* double angle left */
-    content: '\00ab';   
+    content: '\00ab';
     display: inline-block;
-    margin-right: 0.5ch; 
+    margin-right: 0.5ch;
 
 }
